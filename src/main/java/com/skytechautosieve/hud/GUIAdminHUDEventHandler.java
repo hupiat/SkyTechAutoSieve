@@ -10,7 +10,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 public class GUIAdminHUDEventHandler {
 
 	private boolean guiOpened = false;
-	private int delayTicks = 100; // 5 secondes
 
 	@SubscribeEvent
 	public void onClientConnectedToServer(PlayerEvent.PlayerLoggedInEvent event) {
