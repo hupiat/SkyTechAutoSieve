@@ -65,13 +65,11 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IEnerg
 
 	@Override
 	public boolean canExtract() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean canReceive() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 }
