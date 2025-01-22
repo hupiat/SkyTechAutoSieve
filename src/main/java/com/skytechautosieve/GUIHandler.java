@@ -23,7 +23,7 @@ public class GUIHandler implements IGuiHandler {
 	@Nullable
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		if (id == GUI_ID) {
-			return new GUIAdminManagement();
+			return new GUIAdminManagementHUD();
 		}
 		return null;
 	}
