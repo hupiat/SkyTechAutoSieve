@@ -1,5 +1,6 @@
 package com.skytechautosieve.management;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class GUIAdminManagement extends GuiScreen {
 	private List<Block> availableBlocks;
 	private List<ItemStack> availableDrops;
 
+	private GUIBlocksList blocksListGui;
+
 	private Block selectedBlock;
 	private ItemStack selectedDrop;
 	private float dropRate = 0.5f; // Default drop rate
@@ -35,6 +38,8 @@ public class GUIAdminManagement extends GuiScreen {
 				availableBlocks.add(block);
 			}
 		}
+
+		blocksListGui = new GUIBlocksList(Minecraft.getMinecraft(), availableBlocks, 150, 120, this.width / 2 - 75, 50);
 
 		availableDrops = new ArrayList<>();
 		for (ItemStack item : Minecraft.getMinecraft().player.inventory.mainInventory) {
@@ -68,20 +73,41 @@ public class GUIAdminManagement extends GuiScreen {
 		}
 	}
 
+	private int scrollOffset = 0;
+	private int visibleItems = 10;
+	private int itemHeight = 20;
+
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
-		int xStart = 50;
-		int yStart = 50;
-		int itemSpacing = 20;
+		this.drawDefaultBackground();
 
-		for (int i = 0; i < availableBlocks.size(); i++) {
+		for (int i = scrollOffset; i < Math.min(scrollOffset + visibleItems, availableBlocks.size()); i++) {
 			Block block = availableBlocks.get(i);
 			String name = block.getLocalizedName();
-			this.fontRenderer.drawString(name, xStart, yStart + (i * itemSpacing), 0xFFFFFF);
+			int drawY = 50 + (i - scrollOffset) * itemHeight;
+
+			this.fontRenderer.drawString(name, 50 + 5, drawY, 0xFFFFFF);
 		}
+
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.drawCenteredString(this.fontRenderer, "Select Block and Drop", this.width / 2, 20, 0xFFFFFF);
+	}
+
+	@Override
+	public void handleMouseInput() throws IOException {
+		super.handleMouseInput();
+		int delta = Integer.signum(org.lwjgl.input.Mouse.getDWheel());
+
+		if (delta < 0) {
+			if (scrollOffset + visibleItems < availableBlocks.size()) {
+				scrollOffset++;
+			}
+		} else if (delta > 0) {
+			if (scrollOffset > 0) {
+				scrollOffset--;
+			}
+		}
 	}
 
 	@Override
