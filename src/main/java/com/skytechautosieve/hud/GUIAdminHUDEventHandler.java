@@ -33,6 +33,5 @@ public class GUIAdminHUDEventHandler {
 			Minecraft.getMinecraft().displayGuiScreen(new GUIAdminManagementHUD());
 			guiOpened = true;
 		});
-
 	}
 }
