@@ -1,4 +1,4 @@
-package com.skytechautosieve.management;
+package com.skytechautosieve.sieves;
 
 import java.util.Objects;
 
