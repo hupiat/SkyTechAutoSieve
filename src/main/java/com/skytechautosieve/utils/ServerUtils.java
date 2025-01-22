@@ -5,7 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-public class ServerUtils {
+public abstract class ServerUtils {
 
 	public static boolean isPlayerAdmin(EntityPlayer player) {
 		if (Minecraft.getMinecraft().isSingleplayer()) {

@@ -10,15 +10,13 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 public class GUIAdminHUDEventHandler {
 
 	private boolean guiOpened = false;
+	private int delayTicks = 100; // 5 secondes
 
 	@SubscribeEvent
-	public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-		if (ServerUtils.isPlayerAdmin(event.player)) {
-			guiOpened = false;
-			Minecraft.getMinecraft().addScheduledTask(() -> {
-				Minecraft.getMinecraft().displayGuiScreen(new GUIAdminManagementHUD());
-				guiOpened = true;
-			});
+	public void onClientConnectedToServer(PlayerEvent.PlayerLoggedInEvent event) {
+		guiOpened = false;
+		if (event.player.world.isRemote && ServerUtils.isPlayerAdmin(event.player)) {
+			displayAdminHUDScreen();
 		}
 	}
 
@@ -26,11 +24,16 @@ public class GUIAdminHUDEventHandler {
 	public void onClientTick(TickEvent.ClientTickEvent event) {
 		if (!guiOpened && Minecraft.getMinecraft().player != null) {
 			if (ServerUtils.isPlayerAdmin(Minecraft.getMinecraft().player)) {
-				Minecraft.getMinecraft().addScheduledTask(() -> {
-					Minecraft.getMinecraft().displayGuiScreen(new GUIAdminManagementHUD());
-				});
-				guiOpened = true;
+				displayAdminHUDScreen();
 			}
 		}
+	}
+
+	private void displayAdminHUDScreen() {
+		Minecraft.getMinecraft().addScheduledTask(() -> {
+			Minecraft.getMinecraft().displayGuiScreen(new GUIAdminManagementHUD());
+			guiOpened = true;
+		});
+
 	}
 }
