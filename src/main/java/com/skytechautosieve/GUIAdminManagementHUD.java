@@ -2,11 +2,9 @@ package com.skytechautosieve;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ResourceLocation;
 
 public class GUIAdminManagementHUD extends GuiScreen {
 
-	private final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("modid:textures/gui/example_gui.png");
 	private GuiButton adminMenuButton;
 
 	@Override
@@ -14,7 +12,7 @@ public class GUIAdminManagementHUD extends GuiScreen {
 		super.initGui();
 		this.buttonList.clear();
 
-		int buttonWidth = 100;
+		int buttonWidth = 200;
 		int buttonHeight = 20;
 		int xPos = (this.width - buttonWidth) / 2;
 		int yPos = (this.height - buttonHeight) / 2;
