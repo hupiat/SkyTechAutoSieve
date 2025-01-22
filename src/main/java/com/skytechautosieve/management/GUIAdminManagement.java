@@ -22,11 +22,10 @@ public class GUIAdminManagement extends GuiScreen {
 	private List<Block> availableBlocks;
 	private List<ItemStack> availableDrops;
 
-	private GUIBlocksList blocksListGui;
-
 	private Block selectedBlock;
 	private ItemStack selectedDrop;
-	private float dropRate = 0.5f; // Default drop rate
+
+	private float dropRate = 0.5f;
 
 	@Override
 	public void initGui() {
@@ -38,8 +37,6 @@ public class GUIAdminManagement extends GuiScreen {
 				availableBlocks.add(block);
 			}
 		}
-
-		blocksListGui = new GUIBlocksList(Minecraft.getMinecraft(), availableBlocks, 150, 120, this.width / 2 - 75, 50);
 
 		availableDrops = new ArrayList<>();
 		for (ItemStack item : Minecraft.getMinecraft().player.inventory.mainInventory) {
@@ -56,6 +53,7 @@ public class GUIAdminManagement extends GuiScreen {
 				1.0F, dropRate, true, true, (slider) -> {
 					dropRate = (float) slider.getValue();
 				});
+
 		this.buttonList.add(rateSlider);
 	}
 
@@ -80,14 +78,15 @@ public class GUIAdminManagement extends GuiScreen {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
-		this.drawDefaultBackground();
 
 		for (int i = scrollOffset; i < Math.min(scrollOffset + visibleItems, availableBlocks.size()); i++) {
 			Block block = availableBlocks.get(i);
+			ItemStack stack = new ItemStack(block);
 			String name = block.getLocalizedName();
 			int drawY = 50 + (i - scrollOffset) * itemHeight;
 
-			this.fontRenderer.drawString(name, 50 + 5, drawY, 0xFFFFFF);
+			this.mc.getRenderItem().renderItemAndEffectIntoGUI(stack, 0, drawY - 5);
+			this.fontRenderer.drawSplitString(name, 30, drawY, 150, 0XFFFFFF);
 		}
 
 		super.drawScreen(mouseX, mouseY, partialTicks);

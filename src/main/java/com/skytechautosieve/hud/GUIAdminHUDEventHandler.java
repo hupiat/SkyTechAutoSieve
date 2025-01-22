@@ -13,24 +13,23 @@ public class GUIAdminHUDEventHandler {
 
 	@SubscribeEvent
 	public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-		if (event.player.world.isRemote) { // Ensure its client side
-			if (ServerUtils.isPlayerAdmin(event.player)) {
-				Minecraft.getMinecraft().addScheduledTask(() -> {
-					Minecraft.getMinecraft().displayGuiScreen(new GUIAdminManagementHUD());
-					guiOpened = true;
-				});
-			}
+		if (ServerUtils.isPlayerAdmin(event.player)) {
+			guiOpened = false;
+			Minecraft.getMinecraft().addScheduledTask(() -> {
+				Minecraft.getMinecraft().displayGuiScreen(new GUIAdminManagementHUD());
+				guiOpened = true;
+			});
 		}
 	}
 
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event) {
-		if (event.phase == TickEvent.Phase.END) {
+		if (!guiOpened && Minecraft.getMinecraft().player != null) {
 			if (ServerUtils.isPlayerAdmin(Minecraft.getMinecraft().player)) {
-				if (Minecraft.getMinecraft().player != null && !guiOpened) {
+				Minecraft.getMinecraft().addScheduledTask(() -> {
 					Minecraft.getMinecraft().displayGuiScreen(new GUIAdminManagementHUD());
-					guiOpened = true;
-				}
+				});
+				guiOpened = true;
 			}
 		}
 	}
