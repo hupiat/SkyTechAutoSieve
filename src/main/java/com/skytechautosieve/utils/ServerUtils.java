@@ -1,4 +1,4 @@
-package com.skytechautosieve;
+package com.skytechautosieve.utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

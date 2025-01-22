@@ -1,4 +1,6 @@
-package com.skytechautosieve;
+package com.skytechautosieve.hud;
+
+import com.skytechautosieve.utils.ServerUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

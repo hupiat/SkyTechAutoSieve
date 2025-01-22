@@ -1,4 +1,4 @@
-package com.skytechautosieve;
+package com.skytechautosieve.hud;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
