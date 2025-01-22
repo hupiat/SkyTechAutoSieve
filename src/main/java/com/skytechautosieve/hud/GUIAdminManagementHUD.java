@@ -1,5 +1,7 @@
 package com.skytechautosieve.hud;
 
+import com.skytechautosieve.management.GUIAdminManagement;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
@@ -24,7 +26,7 @@ public class GUIAdminManagementHUD extends GuiScreen {
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		if (button == adminMenuButton) {
-			mc.displayGuiScreen(new GUIAdminManagementHUD());
+			mc.displayGuiScreen(new GUIAdminManagement());
 		}
 	}
 
