@@ -15,7 +15,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IEnerg
 	private ItemStackHandler inputInventory = new ItemStackHandler(1);
 	private ItemStackHandler outputInventory = new ItemStackHandler(9);
 	private EnergyStorage energyStorage = new EnergyStorage(10000);
-	private SieveDropDataRepository repository;
+	private SieveDropDataRepository repository = new SieveDropDataRepository();
 
 	@Override
 	public void update() {
