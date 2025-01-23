@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -37,13 +39,19 @@ public class SieveDropDataRepository extends WorldSavedData {
 		return nbt;
 	}
 
+	@Nullable
 	public static SieveDropDataRepository get(World world) {
-		MapStorage storage = world.getPerWorldStorage();
-		SieveDropDataRepository instance = (SieveDropDataRepository) storage
-				.getOrLoadData(SieveDropDataRepository.class, DATA_NAME);
-		if (instance == null) {
-			instance = new SieveDropDataRepository();
-			storage.setData(DATA_NAME, instance);
+		SieveDropDataRepository instance = null;
+		MapStorage storage = null;
+		if (world != null) {
+			storage = world.getPerWorldStorage();
+		}
+		if (storage != null) {
+			instance = (SieveDropDataRepository) storage.getOrLoadData(SieveDropDataRepository.class, DATA_NAME);
+			if (instance == null) {
+				instance = new SieveDropDataRepository();
+				storage.setData(DATA_NAME, instance);
+			}
 		}
 		return instance;
 	}

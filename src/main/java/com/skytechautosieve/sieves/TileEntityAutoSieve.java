@@ -15,7 +15,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IEnerg
 	private ItemStackHandler inputInventory = new ItemStackHandler(1);
 	private ItemStackHandler outputInventory = new ItemStackHandler(9);
 	private EnergyStorage energyStorage = new EnergyStorage(10000);
-	private SieveDropDataRepository repository = new SieveDropDataRepository();
+	private SieveDropDataRepository repository = SieveDropDataRepository.get(world);
 
 	@Override
 	public void update() {
@@ -26,7 +26,8 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IEnerg
 
 	private boolean canSift() {
 		ItemStack stack = inputInventory.getStackInSlot(0);
-		return stack != null && repository.getDropData(Block.getBlockFromItem(stack.getItem())) != null;
+		return stack != null && repository != null
+				&& repository.getDropData(Block.getBlockFromItem(stack.getItem())) != null;
 	}
 
 	private void processSieve() {

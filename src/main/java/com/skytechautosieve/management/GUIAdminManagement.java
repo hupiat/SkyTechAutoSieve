@@ -9,6 +9,7 @@ import com.skytechautosieve.sieves.SieveDropData;
 import com.skytechautosieve.sieves.SieveDropDataRepository;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.Item;
@@ -18,7 +19,7 @@ import net.minecraftforge.fml.client.config.GuiSlider;
 
 public class GUIAdminManagement extends GuiScreen {
 
-	private SieveDropDataRepository repository = new SieveDropDataRepository();
+	private SieveDropDataRepository repository = SieveDropDataRepository.get(Minecraft.getMinecraft().world);
 
 	private GuiButton addOrRemoveButton;
 	private GuiSlider rateSlider;
