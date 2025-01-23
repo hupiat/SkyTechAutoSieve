@@ -1,15 +1,11 @@
 package com.skytechautosieve.sieves;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -38,34 +34,7 @@ public class BlockAutoSieve extends Block {
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!world.isRemote) {
-			SieveDropDataRepository repository = SieveDropDataRepository.get(world);
-			BlockPos targetPos = pos.offset(facing);
-			IBlockState targetState = world.getBlockState(targetPos);
-			Block targetBlock = targetState.getBlock();
-
-			world.destroyBlock(targetPos, false);
-
-			List<ItemStack> drops = repository.getDropData(targetBlock).stream().map(SieveDropData::getItem)
-					.collect(Collectors.toList());
-
-			for (ItemStack drop : drops) {
-				player.inventory.addItemStackToInventory(drop);
-				if (!player.inventory.addItemStackToInventory(drop)) {
-					world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, drop));
-				}
-			}
-
-			ItemStack heldItem = player.getHeldItem(hand);
-			if (!player.isCreative()) {
-				heldItem.damageItem(1, player);
-				if (heldItem.getCount() <= 0) {
-					player.setHeldItem(hand, ItemStack.EMPTY);
-				}
-			}
-
-			return true;
-		}
-		return false;
+		Minecraft.getMinecraft().displayGuiScreen(new GUIAutoSieve(player.inventory, new TileEntityAutoSieve()));
+		return true;
 	}
 }
