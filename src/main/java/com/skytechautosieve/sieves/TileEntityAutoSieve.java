@@ -3,9 +3,11 @@ package com.skytechautosieve.sieves;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.ItemStackHandler;
@@ -40,6 +42,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IEnerg
 					outputInventory.insertItem(0, drop.getItem().copy(), false);
 				}
 			}
+			world.playSound(null, pos, SoundEvents.BLOCK_SAND_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			energyStorage.extractEnergy(100, false);
 		}
 	}

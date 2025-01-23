@@ -107,9 +107,21 @@ repositories {
         name 'CleanroomMC Maven'
         url 'https://maven.cleanroommc.com'
     }
+    flatDir {
+        dirs 'run/mods'
+    }
 }
 
 dependencies {
+    implementation name: 'EnderCore-1.12.2-0.5.76'
+    implementation name: 'EnderIO-1.12.2-5.3.70'
+    implementation name: 'ThermalExpansion-1.12.2-5.5.7.1'
+    implementation name: 'CoFHCore-1.12.2-4.6.6.1'
+    implementation name: 'CoFHWorld-1.12.2-1.4.0.1'
+    implementation name: 'RedstoneFlux-1.12-2.1.1.1'
+    implementation name: 'ThermalFoundation-1.12.2-2.6.7.1'
+    implementation name: 'CodeChickenLib-1.12.2-3.2.3.358'
+    
     if (propertyBool('use_modern_java_syntax')) {
         annotationProcessor 'com.github.bsideup.jabel:jabel-javac-plugin:1.0.0'
         // Workaround for https://github.com/bsideup/jabel/issues/174
