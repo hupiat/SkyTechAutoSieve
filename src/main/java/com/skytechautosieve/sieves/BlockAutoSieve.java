@@ -1,9 +1,10 @@
 package com.skytechautosieve.sieves;
 
+import com.skytechautosieve.Program;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -34,7 +35,9 @@ public class BlockAutoSieve extends Block {
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
-		Minecraft.getMinecraft().displayGuiScreen(new GUIAutoSieve(player.inventory, new TileEntityAutoSieve()));
+		if (!world.isRemote) {
+			player.openGui(Program.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
+		}
 		return true;
 	}
 }

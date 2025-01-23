@@ -9,7 +9,6 @@ import com.skytechautosieve.sieves.SieveDropData;
 import com.skytechautosieve.sieves.SieveDropDataRepository;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.Item;
@@ -19,7 +18,7 @@ import net.minecraftforge.fml.client.config.GuiSlider;
 
 public class GUIAdminManagement extends GuiScreen {
 
-	private SieveDropDataRepository repository = SieveDropDataRepository.get(Minecraft.getMinecraft().world);
+	private SieveDropDataRepository repository = null;
 
 	private GuiButton addOrRemoveButton;
 	private GuiSlider rateSlider;
@@ -42,6 +41,8 @@ public class GUIAdminManagement extends GuiScreen {
 	@Override
 	public void initGui() {
 		super.initGui();
+		repository = SieveDropDataRepository.get(this.mc.world);
+
 		availableBlocks = new ArrayList<>();
 		for (ResourceLocation blockId : Block.REGISTRY.getKeys()) {
 			Block block = Block.REGISTRY.getObject(blockId);
@@ -134,7 +135,7 @@ public class GUIAdminManagement extends GuiScreen {
 			} else {
 				dropData.add(new SieveDropData(dropStack, (float) rateSlider.getValue()));
 			}
-			repository.setDropData(block, dropData);
+			mc.addScheduledTask(() -> repository.setDropData(block, dropData, this.mc.world));
 		}
 	}
 
