@@ -23,6 +23,10 @@ public class SieveDropDataRepository extends WorldSavedData {
 		super(DATA_NAME);
 	}
 
+	public SieveDropDataRepository(String name) {
+		super(name);
+	}
+
 	public void setDropData(Block block, List<SieveDropData> drops, World world) {
 		sieveData.put(block, drops);
 		markDirty();
@@ -63,6 +67,7 @@ public class SieveDropDataRepository extends WorldSavedData {
 			}
 			nbt.setTag(entry.getKey().getRegistryName().toString(), blockData);
 		}
+		System.out.println("WRITED : " + nbt);
 		return nbt;
 	}
 

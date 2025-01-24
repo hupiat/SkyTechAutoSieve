@@ -35,18 +35,18 @@ public class PacketSyncSieveData implements IMessage {
 			CompressedStreamTools.writeCompressed(data, output);
 			byte[] compressedData = output.toByteArray();
 
-			int chunkSize = 1024; // Define chunk size
-			int totalChunks = (compressedData.length + chunkSize - 1) / chunkSize; // Calculate total chunks
+			int chunkSize = 1024;
+			int totalChunks = (compressedData.length + chunkSize - 1) / chunkSize;
 
-			buf.writeInt(totalChunks); // Write total number of chunks
+			buf.writeInt(totalChunks);
 
 			for (int i = 0; i < totalChunks; i++) {
 				int start = i * chunkSize;
 				int end = Math.min(compressedData.length, start + chunkSize);
 				int length = end - start;
 
-				buf.writeInt(length); // Write chunk length correctly
-				buf.writeBytes(compressedData, start, length); // Write chunk data
+				buf.writeInt(length);
+				buf.writeBytes(compressedData, start, length);
 			}
 
 			System.out.println("Sent " + totalChunks + " chunks, total size: " + compressedData.length);
@@ -59,7 +59,9 @@ public class PacketSyncSieveData implements IMessage {
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		try {
-			int totalChunks = buf.readInt(); // Read total number of chunks
+			int totalChunks = buf.readInt();
+			System.out.println(totalChunks);
+			System.out.println(buf);
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 
 			for (int i = 0; i < totalChunks; i++) {
@@ -67,14 +69,14 @@ public class PacketSyncSieveData implements IMessage {
 					throw new IOException("Not enough bytes to read chunk length.");
 				}
 
-				int chunkLength = buf.readInt(); // Read chunk length
+				int chunkLength = buf.readInt();
 
 				if (chunkLength <= 0 || chunkLength > buf.readableBytes()) {
 					throw new IOException("Invalid chunk length: " + chunkLength);
 				}
 
 				byte[] chunk = new byte[chunkLength];
-				buf.readBytes(chunk); // Read chunk bytes
+				buf.readBytes(chunk);
 				output.write(chunk);
 			}
 
@@ -91,7 +93,7 @@ public class PacketSyncSieveData implements IMessage {
 		public IMessage onMessage(PacketSyncSieveData message, MessageContext ctx) {
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				World world = Minecraft.getMinecraft().world;
-				if (world != null) {
+				if (world != null && !world.isRemote) {
 					SieveDropDataRepository repository = SieveDropDataRepository.get(world);
 					if (repository != null) {
 						repository.readFromNBT(message.getData());

@@ -1,6 +1,5 @@
 package com.skytechautosieve;
 
-import com.skytechautosieve.sieves.PacketSyncSieveData;
 import com.skytechautosieve.sieves.PacketUpdateSieveData;
 import com.skytechautosieve.sieves.TileEntityAutoSieve;
 
@@ -34,6 +33,7 @@ public class Program {
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 		NETWORK_CHANNEL.registerMessage(PacketUpdateSieveData.Handler.class, PacketUpdateSieveData.class, 0,
 				Side.SERVER);
-		NETWORK_CHANNEL.registerMessage(PacketSyncSieveData.Handler.class, PacketSyncSieveData.class, 0, Side.CLIENT);
+		// NETWORK_CHANNEL.registerMessage(PacketSyncSieveData.Handler.class,
+		// PacketSyncSieveData.class, 0, Side.CLIENT);
 	}
 }
