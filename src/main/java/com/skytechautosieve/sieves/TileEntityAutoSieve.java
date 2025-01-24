@@ -11,7 +11,6 @@ import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityAutoSieve extends TileEntity implements ITickable, IInventory {
@@ -22,7 +21,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	private static final int TOTAL_SLOTS = 48;
 
 	private final ItemStackHandler inventory = new ItemStackHandler(TOTAL_SLOTS);
-	private final EnergyStorage energyStorage = new EnergyStorage(10000, 200, 200);
+	private final EnergyStorage energyStorage = new EnergyStorage(10000, 500, 500);
 
 	private static final int ENERGY_PER_TICK = 100;
 	private int processTime = 0;
@@ -60,7 +59,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	}
 
 	private void processSieve() {
-		inventory.extractItem(INPUT_SLOT, 1, false); // Remove 1 input item
+		inventory.extractItem(INPUT_SLOT, 1, false);
 		ItemStack output = new ItemStack(Items.DIAMOND, 1); // Example output
 
 		for (int i = OUTPUT_START; i <= OUTPUT_END; i++) {
@@ -112,7 +111,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityEnergy.ENERGY) {
+		if (capability == CapabilityEnergy.ENERGY) {
 			return true;
 		}
 		return super.hasCapability(capability, facing);
@@ -120,9 +119,6 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-		}
 		if (capability == CapabilityEnergy.ENERGY) {
 			return CapabilityEnergy.ENERGY.cast(energyStorage);
 		}

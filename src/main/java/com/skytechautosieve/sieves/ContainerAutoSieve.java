@@ -81,5 +81,4 @@ public class ContainerAutoSieve extends Container {
 
 		return stack;
 	}
-
 }

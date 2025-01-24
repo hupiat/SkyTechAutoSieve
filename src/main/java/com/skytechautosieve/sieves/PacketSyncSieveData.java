@@ -3,6 +3,8 @@ package com.skytechautosieve.sieves;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -14,6 +16,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketSyncSieveData implements IMessage {
+
+	private Logger LOGGER = Logger.getLogger(PacketSyncSieveData.class.getSimpleName());
 
 	private NBTTagCompound data;
 
@@ -50,7 +54,7 @@ public class PacketSyncSieveData implements IMessage {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, "Error while serializing data", e);
 		}
 	}
 
@@ -78,7 +82,7 @@ public class PacketSyncSieveData implements IMessage {
 
 			data = CompressedStreamTools.readCompressed(new ByteArrayInputStream(output.toByteArray()));
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, "Error while deserializing data", e);
 		}
 	}
 
@@ -91,7 +95,6 @@ public class PacketSyncSieveData implements IMessage {
 					SieveDropDataRepository repository = SieveDropDataRepository.get(world);
 					if (repository != null) {
 						repository.readFromNBT(message.getData());
-						System.out.println("Data successfully loaded on client side.");
 					}
 				}
 			});
