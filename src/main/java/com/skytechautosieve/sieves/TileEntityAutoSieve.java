@@ -16,8 +16,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityAutoSieve extends TileEntity implements ITickable, IInventory {
 
-	private final ItemStackHandler inputInventory = new ItemStackHandler(1);
-	private final ItemStackHandler outputInventory = new ItemStackHandler(9);
+	private final ItemStackHandler inventory = new ItemStackHandler(48);
 	private final EnergyStorage energyStorage = new EnergyStorage(10000, 200, 200);
 
 	private static final int ENERGY_PER_TICK = 100;
@@ -42,13 +41,13 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	}
 
 	private boolean canSift() {
-		ItemStack stack = inputInventory.getStackInSlot(0);
+		ItemStack stack = inventory.getStackInSlot(0);
 		return !stack.isEmpty() && hasOutputSpace();
 	}
 
 	private boolean hasOutputSpace() {
-		for (int i = 0; i < outputInventory.getSlots(); i++) {
-			if (outputInventory.getStackInSlot(i).isEmpty()) {
+		for (int i = 1; i < inventory.getSlots(); i++) {
+			if (inventory.getStackInSlot(i).isEmpty()) {
 				return true;
 			}
 		}
@@ -56,12 +55,12 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	}
 
 	private void processSieve() {
-		inputInventory.extractItem(0, 1, false);
+		inventory.extractItem(0, 1, false);
 		ItemStack output = new ItemStack(Items.DIAMOND, 1);
 
-		for (int i = 0; i < outputInventory.getSlots(); i++) {
-			if (outputInventory.getStackInSlot(i).isEmpty()) {
-				outputInventory.insertItem(i, output, false);
+		for (int i = 1; i < inventory.getSlots(); i++) {
+			if (inventory.getStackInSlot(i).isEmpty()) {
+				inventory.insertItem(i, output, false);
 				break;
 			}
 		}
@@ -88,8 +87,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
-					.cast(facing == EnumFacing.UP ? inputInventory : outputInventory);
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
 		}
 		if (capability == CapabilityEnergy.ENERGY) {
 			return CapabilityEnergy.ENERGY.cast(energyStorage);
@@ -101,18 +99,13 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 
 	@Override
 	public int getSizeInventory() {
-		return inputInventory.getSlots() + outputInventory.getSlots();
+		return inventory.getSlots();
 	}
 
 	@Override
 	public boolean isEmpty() {
-		for (int i = 0; i < inputInventory.getSlots(); i++) {
-			if (!inputInventory.getStackInSlot(i).isEmpty()) {
-				return false;
-			}
-		}
-		for (int i = 0; i < outputInventory.getSlots(); i++) {
-			if (!outputInventory.getStackInSlot(i).isEmpty()) {
+		for (int i = 0; i < inventory.getSlots(); i++) {
+			if (!inventory.getStackInSlot(i).isEmpty()) {
 				return false;
 			}
 		}
@@ -121,38 +114,34 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 
 	@Override
 	public ItemStack getStackInSlot(int index) {
-		if (index < inputInventory.getSlots()) {
-			return inputInventory.getStackInSlot(index);
-		} else {
-			return outputInventory.getStackInSlot(index - inputInventory.getSlots());
+		if (index >= 0 && index < inventory.getSlots()) {
+			return inventory.getStackInSlot(index);
 		}
+		throw new RuntimeException("Slot " + index + " not in valid range - [0," + inventory.getSlots() + ")");
 	}
 
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
-		if (index < inputInventory.getSlots()) {
-			return inputInventory.extractItem(index, count, false);
-		} else {
-			return outputInventory.extractItem(index - inputInventory.getSlots(), count, false);
+		if (index >= 0 && index < inventory.getSlots()) {
+			return inventory.extractItem(index, count, false);
 		}
+		throw new RuntimeException("Slot " + index + " not in valid range - [0," + inventory.getSlots() + ")");
 	}
 
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
-		if (index < inputInventory.getSlots()) {
-			return inputInventory.extractItem(index, inputInventory.getStackInSlot(index).getCount(), false);
-		} else {
-			return outputInventory.extractItem(index - inputInventory.getSlots(),
-					outputInventory.getStackInSlot(index).getCount(), false);
+		if (index >= 0 && index < inventory.getSlots()) {
+			return inventory.extractItem(index, inventory.getStackInSlot(index).getCount(), false);
 		}
+		throw new RuntimeException("Slot " + index + " not in valid range - [0," + inventory.getSlots() + ")");
 	}
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
-		if (index < inputInventory.getSlots()) {
-			inputInventory.setStackInSlot(index, stack);
+		if (index >= 0 && index < inventory.getSlots()) {
+			inventory.setStackInSlot(index, stack);
 		} else {
-			outputInventory.setStackInSlot(index - inputInventory.getSlots(), stack);
+			throw new RuntimeException("Slot " + index + " not in valid range - [0," + inventory.getSlots() + ")");
 		}
 	}
 
@@ -176,32 +165,27 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		return index < inputInventory.getSlots(); // Only input slot accepts items
+		return index == 0;
 	}
 
 	@Override
 	public void clear() {
-		for (int i = 0; i < inputInventory.getSlots(); i++) {
-			inputInventory.setStackInSlot(i, ItemStack.EMPTY);
-		}
-		for (int i = 0; i < outputInventory.getSlots(); i++) {
-			outputInventory.setStackInSlot(i, ItemStack.EMPTY);
+		for (int i = 0; i < inventory.getSlots(); i++) {
+			inventory.setStackInSlot(i, ItemStack.EMPTY);
 		}
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		inputInventory.deserializeNBT(compound.getCompoundTag("InputInventory"));
-		outputInventory.deserializeNBT(compound.getCompoundTag("OutputInventory"));
+		inventory.deserializeNBT(compound.getCompoundTag("Inventory"));
 		energyStorage.receiveEnergy(compound.getInteger("EnergyStored"), false);
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		compound.setTag("InputInventory", inputInventory.serializeNBT());
-		compound.setTag("OutputInventory", outputInventory.serializeNBT());
+		compound.setTag("Inventory", inventory.serializeNBT());
 		compound.setInteger("EnergyStored", energyStorage.getEnergyStored());
 		return compound;
 	}
@@ -222,7 +206,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 
 	@Override
 	public String getName() {
-		return TileEntityAutoSieve.class.getSimpleName();
+		return "container.auto_sieve";
 	}
 
 	@Override

@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 public class BlockAutoSieve extends Block {
 
 	public BlockAutoSieve() {
-		super(Material.GRASS);
+		super(Material.IRON);
 		setTranslationKey("auto_sieve");
 		setRegistryName("auto_sieve");
 		setCreativeTab(CreativeTabs.MISC);

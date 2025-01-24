@@ -14,20 +14,37 @@ public class ContainerAutoSieve extends Container {
 	public ContainerAutoSieve(InventoryPlayer playerInv, TileEntityAutoSieve tileEntity) {
 		this.tileInventory = tileEntity;
 
-		this.addSlotToContainer(new Slot(tileEntity, 0, 56, 35));
+		// Add tile entity slots (6 rows, 8 columns divided in 2 parts so 4 by each)
+		int startX = 8;
+		int startY = -10;
+		int slotSize = 18;
 
-		for (int i = 0; i < 9; i++) {
-			this.addSlotToContainer(new Slot(tileEntity, i + 1, 116 + (i % 3) * 18, 17 + (i / 3) * 18));
-		}
-
-		for (int row = 0; row < 3; row++) {
-			for (int col = 0; col < 9; col++) {
-				this.addSlotToContainer(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
+		for (int row = 0; row < 6; row++) {
+			startX = 8;
+			for (int col = 0; col < 8; col++) {
+				if (col == 4) {
+					startX = 26;
+				}
+				this.addSlotToContainer(
+						new Slot(tileEntity, col + row * 6, startX + col * slotSize, startY + row * slotSize));
 			}
 		}
 
+		// Add player inventory slots (3 rows, 9 columns)
+		startX = 8;
+		startY = 111;
+
+		for (int row = 0; row < 3; row++) {
+			for (int col = 0; col < 9; col++) {
+				this.addSlotToContainer(
+						new Slot(playerInv, col + row * 9 + 9, startX + col * slotSize, startY + row * slotSize));
+			}
+		}
+
+		// Add player hotbar slots (1 row, 9 columns)
+		startY = 169;
 		for (int col = 0; col < 9; col++) {
-			this.addSlotToContainer(new Slot(playerInv, col, 8 + col * 18, 142));
+			this.addSlotToContainer(new Slot(playerInv, col, startX + col * slotSize, startY));
 		}
 	}
 

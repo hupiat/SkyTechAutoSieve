@@ -37,8 +37,8 @@ public class GUIAutoSieve extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		this.fontRenderer.drawString("Sifting", 8, 6, 0x404040);
-		this.fontRenderer.drawString("Inventory", 8, this.ySize - 94, 0x404040);
+		this.fontRenderer.drawString("Input", 8, -20, 0x404040);
+		this.fontRenderer.drawString("Output", 98, -20, 0x404040);
 	}
 
 	private void drawInterface() {
