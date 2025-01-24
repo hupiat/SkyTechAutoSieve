@@ -1,10 +1,12 @@
-package com.skytechautosieve.sieves;
+package com.skytechautosieve.sieves.networking;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.skytechautosieve.sieves.data.SieveDropDataRepository;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;

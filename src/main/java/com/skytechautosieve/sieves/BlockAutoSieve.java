@@ -1,6 +1,7 @@
 package com.skytechautosieve.sieves;
 
 import com.skytechautosieve.Program;
+import com.skytechautosieve.sieves.networking.PacketSyncEnergy;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -49,7 +50,8 @@ public class BlockAutoSieve extends Block {
 		EntityPlayerMP player = (EntityPlayerMP) world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 10.0,
 				false);
 		if (powered) {
-			Program.NETWORK_CLIENT_CHANNEL_ENERGY.sendTo(new PacketSyncEnergy(pos, 500), player);
+			Program.NETWORK_CLIENT_CHANNEL_ENERGY.sendTo(new PacketSyncEnergy(pos, TileEntityAutoSieve.MAX_ENERGY),
+					player);
 		}
 	}
 }

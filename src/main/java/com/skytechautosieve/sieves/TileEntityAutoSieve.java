@@ -20,8 +20,9 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	private static final int OUTPUT_END = 48;
 	private static final int TOTAL_SLOTS = 48;
 
+	public static final int MAX_ENERGY = 10000;
 	private final ItemStackHandler inventory = new ItemStackHandler(TOTAL_SLOTS);
-	private final EnergyStorage energyStorage = new EnergyStorage(10000, 500, 500);
+	private final EnergyStorage energyStorage = new EnergyStorage(MAX_ENERGY, MAX_ENERGY, 500);
 
 	private static final int ENERGY_PER_TICK = 100;
 	private int processTime = 0;

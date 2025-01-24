@@ -1,4 +1,4 @@
-package com.skytechautosieve.sieves;
+package com.skytechautosieve.sieves.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,6 @@
-package com.skytechautosieve.sieves;
+package com.skytechautosieve.sieves.networking;
+
+import com.skytechautosieve.sieves.TileEntityAutoSieve;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;

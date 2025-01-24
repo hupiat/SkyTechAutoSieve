@@ -3,8 +3,8 @@ package com.skytechautosieve;
 import org.lwjgl.input.Keyboard;
 
 import com.skytechautosieve.hud.GUIAdminManagementHUD;
-import com.skytechautosieve.sieves.PacketSyncSieveData;
-import com.skytechautosieve.sieves.SieveDropDataRepository;
+import com.skytechautosieve.sieves.data.SieveDropDataRepository;
+import com.skytechautosieve.sieves.networking.PacketSyncSieveData;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;

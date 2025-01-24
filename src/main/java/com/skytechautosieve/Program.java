@@ -1,9 +1,9 @@
 package com.skytechautosieve;
 
-import com.skytechautosieve.sieves.PacketSyncEnergy;
-import com.skytechautosieve.sieves.PacketSyncSieveData;
-import com.skytechautosieve.sieves.PacketUpdateSieveData;
 import com.skytechautosieve.sieves.TileEntityAutoSieve;
+import com.skytechautosieve.sieves.networking.PacketSyncEnergy;
+import com.skytechautosieve.sieves.networking.PacketSyncSieveData;
+import com.skytechautosieve.sieves.networking.PacketUpdateSieveData;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;

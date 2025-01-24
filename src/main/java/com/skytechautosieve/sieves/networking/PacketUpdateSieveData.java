@@ -1,8 +1,10 @@
-package com.skytechautosieve.sieves;
+package com.skytechautosieve.sieves.networking;
 
 import java.util.List;
 
 import com.skytechautosieve.Program;
+import com.skytechautosieve.sieves.data.SieveDropData;
+import com.skytechautosieve.sieves.data.SieveDropDataRepository;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;

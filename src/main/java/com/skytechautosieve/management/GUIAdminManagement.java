@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.skytechautosieve.Program;
-import com.skytechautosieve.sieves.PacketUpdateSieveData;
-import com.skytechautosieve.sieves.SieveDropData;
-import com.skytechautosieve.sieves.SieveDropDataRepository;
+import com.skytechautosieve.sieves.data.SieveDropData;
+import com.skytechautosieve.sieves.data.SieveDropDataRepository;
+import com.skytechautosieve.sieves.networking.PacketUpdateSieveData;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
