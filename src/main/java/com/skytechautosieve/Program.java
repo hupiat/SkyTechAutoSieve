@@ -1,5 +1,6 @@
 package com.skytechautosieve;
 
+import com.skytechautosieve.sieves.PacketSyncSieveData;
 import com.skytechautosieve.sieves.PacketUpdateSieveData;
 import com.skytechautosieve.sieves.TileEntityAutoSieve;
 
@@ -17,8 +18,10 @@ public class Program {
 
 	public static Program instance = null;
 
-	public static final SimpleNetworkWrapper NETWORK_CHANNEL = NetworkRegistry.INSTANCE
-			.newSimpleChannel("skytechautosieve");
+	public static final SimpleNetworkWrapper NETWORK_SERVER_CHANNEL_SIEVE_DATA = NetworkRegistry.INSTANCE
+			.newSimpleChannel("skytechautosieve:server");
+	public static final SimpleNetworkWrapper NETWORK_CLIENT_CHANNEL_SIEVE_DATA = NetworkRegistry.INSTANCE
+			.newSimpleChannel("skytechautosieve:client");
 
 	public Program() {
 		super();
@@ -31,9 +34,9 @@ public class Program {
 		MinecraftForge.EVENT_BUS.register(new EventsSuscriberHandler());
 		GameRegistry.registerTileEntity(TileEntityAutoSieve.class, new ResourceLocation("skytechautosieve:autosieve"));
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
-		NETWORK_CHANNEL.registerMessage(PacketUpdateSieveData.Handler.class, PacketUpdateSieveData.class, 0,
-				Side.SERVER);
-		// NETWORK_CHANNEL.registerMessage(PacketSyncSieveData.Handler.class,
-		// PacketSyncSieveData.class, 0, Side.CLIENT);
+		NETWORK_SERVER_CHANNEL_SIEVE_DATA.registerMessage(PacketUpdateSieveData.Handler.class,
+				PacketUpdateSieveData.class, 0, Side.SERVER);
+		NETWORK_CLIENT_CHANNEL_SIEVE_DATA.registerMessage(PacketSyncSieveData.Handler.class, PacketSyncSieveData.class,
+				0, Side.CLIENT);
 	}
 }

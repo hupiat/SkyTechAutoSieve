@@ -49,8 +49,6 @@ public class PacketSyncSieveData implements IMessage {
 				buf.writeBytes(compressedData, start, length);
 			}
 
-			System.out.println("Sent " + totalChunks + " chunks, total size: " + compressedData.length);
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -60,8 +58,6 @@ public class PacketSyncSieveData implements IMessage {
 	public void fromBytes(ByteBuf buf) {
 		try {
 			int totalChunks = buf.readInt();
-			System.out.println(totalChunks);
-			System.out.println(buf);
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 
 			for (int i = 0; i < totalChunks; i++) {
@@ -81,8 +77,6 @@ public class PacketSyncSieveData implements IMessage {
 			}
 
 			data = CompressedStreamTools.readCompressed(new ByteArrayInputStream(output.toByteArray()));
-			System.out.println("Received and reconstructed " + totalChunks + " chunks.");
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -93,7 +87,7 @@ public class PacketSyncSieveData implements IMessage {
 		public IMessage onMessage(PacketSyncSieveData message, MessageContext ctx) {
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				World world = Minecraft.getMinecraft().world;
-				if (world != null && !world.isRemote) {
+				if (world != null) {
 					SieveDropDataRepository repository = SieveDropDataRepository.get(world);
 					if (repository != null) {
 						repository.readFromNBT(message.getData());
