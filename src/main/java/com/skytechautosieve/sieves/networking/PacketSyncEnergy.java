@@ -14,6 +14,14 @@ public class PacketSyncEnergy implements IMessage {
 	private BlockPos pos;
 	private int energyStored;
 
+	public BlockPos getPos() {
+		return pos;
+	}
+
+	public int getEnergyStored() {
+		return energyStored;
+	}
+
 	public PacketSyncEnergy() {
 	}
 

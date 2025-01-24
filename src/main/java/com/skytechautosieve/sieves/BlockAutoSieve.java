@@ -45,8 +45,13 @@ public class BlockAutoSieve extends Block {
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock,
 			BlockPos neighborPos) {
+		chargeEnergyThenSendToClient(world, pos);
+	}
+
+	public static void chargeEnergyThenSendToClient(World world, BlockPos pos) {
 		boolean powered = world.isBlockPowered(pos);
 		if (powered) {
+			((TileEntityAutoSieve) world.getTileEntity(pos)).setField(1, TileEntityAutoSieve.MAX_ENERGY);
 			Program.NETWORK_CLIENT_CHANNEL_ENERGY.sendToAll(new PacketSyncEnergy(pos, TileEntityAutoSieve.MAX_ENERGY));
 		}
 	}

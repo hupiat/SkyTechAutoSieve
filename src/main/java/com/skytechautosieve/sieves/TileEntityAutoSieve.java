@@ -37,16 +37,15 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 			if (canSift() && energyStorage.getEnergyStored() >= ENERGY_PER_TICK) {
 				processTime++;
 				energyStorage.extractEnergy(ENERGY_PER_TICK, false);
-
 				if (processTime >= PROCESS_TIME_REQUIRED) {
 					processSieve();
 					processTime = 0;
 				}
 			} else {
 				processTime = 0;
+				BlockAutoSieve.chargeEnergyThenSendToClient(world, pos);
 			}
 			if (world.getTotalWorldTime() % 20 == 0) {
-				System.out.println(energyStorage.getEnergyStored());
 				PacketSyncEnergy packet = new PacketSyncEnergy(pos, energyStorage.getEnergyStored());
 				Program.NETWORK_CLIENT_CHANNEL_ENERGY.sendToAll(packet);
 			}
