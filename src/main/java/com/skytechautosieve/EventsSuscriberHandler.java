@@ -16,12 +16,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 @Mod.EventBusSubscriber
-public class EventsSuscriberHandler implements IMessageHandler<PacketSyncSieveData, IMessage> {
+public class EventsSuscriberHandler {
 
 	private static final KeyBinding OPEN_SIEVE_GUI = new KeyBinding("key.open_sieve_gui", Keyboard.KEY_A,
 			"key.categories.sieve");
@@ -58,18 +55,5 @@ public class EventsSuscriberHandler implements IMessageHandler<PacketSyncSieveDa
 						new PacketSyncSieveData(repo.writeToNBT(new NBTTagCompound())), (EntityPlayerMP) event.player);
 			}
 		}
-	}
-
-	@Override
-	public IMessage onMessage(PacketSyncSieveData message, MessageContext ctx) {
-		if (Minecraft.getMinecraft().world != null) {
-			Minecraft.getMinecraft().addScheduledTask(() -> {
-				SieveDropDataRepository repository = SieveDropDataRepository.get(Minecraft.getMinecraft().world);
-				if (repository != null) {
-					repository.readFromNBT(message.getData());
-				}
-			});
-		}
-		return null;
 	}
 }

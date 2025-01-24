@@ -18,10 +18,10 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityAutoSieve extends TileEntity implements ITickable, IInventory {
 
-	private static final int INPUT_SLOT = 0;
-	private static final int OUTPUT_START = 23;
-	private static final int OUTPUT_END = 47;
-	private static final int TOTAL_SLOTS = 48;
+	public static final int INPUT_SLOT = 0;
+	public static final int OUTPUT_START = 23;
+	public static final int OUTPUT_END = 47;
+	public static final int TOTAL_SLOTS = 48;
 
 	public static final int MAX_ENERGY = 10000;
 	private final ItemStackHandler inventory = new ItemStackHandler(TOTAL_SLOTS);
@@ -75,7 +75,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 
 		for (int i = OUTPUT_START; i <= OUTPUT_END; i++) {
 			if (inventory.getStackInSlot(i).isEmpty()) {
-				inventory.insertItem(i, output.copy(), false);
+				inventory.insertItem(i, output, false);
 				break;
 			}
 		}
@@ -116,6 +116,10 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	@Override
 	public int getFieldCount() {
 		return 2;
+	}
+
+	public ItemStackHandler getInventory() {
+		return inventory;
 	}
 
 	// Capability handling for Forge compatibility (energy and item inventory)
@@ -167,6 +171,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
 		inventory.setStackInSlot(index, stack);
+		markDirty();
 	}
 
 	@Override

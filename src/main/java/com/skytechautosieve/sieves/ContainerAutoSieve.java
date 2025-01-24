@@ -19,6 +19,7 @@ public class ContainerAutoSieve extends Container {
 		int startY = -10;
 		int slotSize = 18;
 
+		int counter = 0;
 		for (int row = 0; row < 6; row++) {
 			startX = 8;
 			for (int col = 0; col < 8; col++) {
@@ -26,7 +27,8 @@ public class ContainerAutoSieve extends Container {
 					startX = 26;
 				}
 				this.addSlotToContainer(
-						new Slot(tileEntity, col + row * 6, startX + col * slotSize, startY + row * slotSize));
+						new Slot(tileEntity, counter, startX + col * slotSize, startY + row * slotSize));
+				counter++;
 			}
 		}
 
@@ -62,8 +64,19 @@ public class ContainerAutoSieve extends Container {
 			ItemStack currentStack = slot.getStack();
 			stack = currentStack.copy();
 
-			if (!this.mergeItemStack(currentStack, 1, 25, false)) {
-				return ItemStack.EMPTY;
+			int tileInventoryStart = 0;
+			int tileInventoryEnd = TileEntityAutoSieve.TOTAL_SLOTS;
+			int playerInventoryStart = tileInventoryEnd;
+			int playerInventoryEnd = tileInventoryEnd + 36;
+
+			if (index < tileInventoryEnd) {
+				if (!this.mergeItemStack(currentStack, playerInventoryStart, playerInventoryEnd, true)) {
+					return ItemStack.EMPTY;
+				}
+			} else {
+				if (!this.mergeItemStack(currentStack, tileInventoryStart, tileInventoryEnd, false)) {
+					return ItemStack.EMPTY;
+				}
 			}
 
 			if (currentStack.isEmpty()) {
@@ -72,7 +85,6 @@ public class ContainerAutoSieve extends Container {
 				slot.onSlotChanged();
 			}
 		}
-
 		return stack;
 	}
 }
