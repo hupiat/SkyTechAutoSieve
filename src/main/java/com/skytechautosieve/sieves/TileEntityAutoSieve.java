@@ -1,5 +1,8 @@
 package com.skytechautosieve.sieves;
 
+import com.skytechautosieve.Program;
+import com.skytechautosieve.sieves.networking.PacketSyncEnergy;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -41,6 +44,11 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 				}
 			} else {
 				processTime = 0;
+			}
+			if (world.getTotalWorldTime() % 20 == 0) {
+				System.out.println(energyStorage.getEnergyStored());
+				PacketSyncEnergy packet = new PacketSyncEnergy(pos, energyStorage.getEnergyStored());
+				Program.NETWORK_CLIENT_CHANNEL_ENERGY.sendToAll(packet);
 			}
 		}
 	}

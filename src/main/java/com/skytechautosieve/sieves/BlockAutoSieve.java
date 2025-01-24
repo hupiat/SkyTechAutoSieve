@@ -8,7 +8,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -47,11 +46,8 @@ public class BlockAutoSieve extends Block {
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock,
 			BlockPos neighborPos) {
 		boolean powered = world.isBlockPowered(pos);
-		EntityPlayerMP player = (EntityPlayerMP) world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 10.0,
-				false);
 		if (powered) {
-			Program.NETWORK_CLIENT_CHANNEL_ENERGY.sendTo(new PacketSyncEnergy(pos, TileEntityAutoSieve.MAX_ENERGY),
-					player);
+			Program.NETWORK_CLIENT_CHANNEL_ENERGY.sendToAll(new PacketSyncEnergy(pos, TileEntityAutoSieve.MAX_ENERGY));
 		}
 	}
 }

@@ -5,7 +5,6 @@ import com.skytechautosieve.sieves.TileEntityAutoSieve;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -45,7 +44,7 @@ public class PacketSyncEnergy implements IMessage {
 					TileEntityAutoSieve tile = (TileEntityAutoSieve) Minecraft.getMinecraft().world
 							.getTileEntity(message.pos);
 					if (tile != null) {
-						tile.getCapability(CapabilityEnergy.ENERGY, null).receiveEnergy(message.energyStored, false);
+						tile.setField(1, message.energyStored);
 					}
 				}
 			});
