@@ -49,9 +49,19 @@ public class GUIAutoSieve extends GuiContainer {
 	private void drawEnergyBar() {
 		int maxEnergy = tileEntity.getMaxEnergyStored();
 		int currentEnergy = tileEntity.getEnergyStored();
-		int energyHeight = (int) ((currentEnergy / (float) maxEnergy) * 50);
 
-		drawRect(guiLeft + 10, guiTop + 15 + (50 - energyHeight), guiLeft + 26, guiTop + 65, 0xFF00FF00);
+		int energyHeight = maxEnergy > 0 ? (int) ((currentEnergy / (float) maxEnergy) * 50) : 0;
+
+		int energyBarX = guiLeft + 82;
+		int energyBarY = guiTop + 50 + (50 - energyHeight);
+		int energyBarWidth = 11;
+		int energyBarMaxHeight = 80;
+
+		drawRect(energyBarX, guiTop + 20, energyBarX + energyBarWidth, guiTop + 20 + energyBarMaxHeight, 0xFF555555);
+
+		if (energyHeight > 0) {
+			drawRect(energyBarX, energyBarY, energyBarX + energyBarWidth, guiTop + 20 + energyBarMaxHeight, 0xFF00FF00);
+		}
 	}
 
 	@Override

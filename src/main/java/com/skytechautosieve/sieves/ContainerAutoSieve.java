@@ -55,6 +55,10 @@ public class ContainerAutoSieve extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+		if (index != 0) {
+			return ItemStack.EMPTY;
+		}
+
 		ItemStack stack = ItemStack.EMPTY;
 		Slot slot = this.inventorySlots.get(index);
 
@@ -62,13 +66,10 @@ public class ContainerAutoSieve extends Container {
 			ItemStack currentStack = slot.getStack();
 			stack = currentStack.copy();
 
-			if (index < tileInventory.getSizeInventory()) {
-				if (!this.mergeItemStack(currentStack, tileInventory.getSizeInventory(), this.inventorySlots.size(),
-						true)) {
+			if (index == 0) {
+				if (!this.mergeItemStack(currentStack, 1, 25, false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(currentStack, 0, tileInventory.getSizeInventory(), false)) {
-				return ItemStack.EMPTY;
 			}
 
 			if (currentStack.isEmpty()) {
@@ -80,4 +81,5 @@ public class ContainerAutoSieve extends Container {
 
 		return stack;
 	}
+
 }
