@@ -19,8 +19,8 @@ import net.minecraftforge.items.ItemStackHandler;
 public class TileEntityAutoSieve extends TileEntity implements ITickable, IInventory {
 
 	private static final int INPUT_SLOT = 0;
-	private static final int OUTPUT_START = 24;
-	private static final int OUTPUT_END = 48;
+	private static final int OUTPUT_START = 23;
+	private static final int OUTPUT_END = 47;
 	private static final int TOTAL_SLOTS = 48;
 
 	public static final int MAX_ENERGY = 10000;
@@ -43,11 +43,14 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 				}
 			} else {
 				processTime = 0;
-				BlockAutoSieve.chargeEnergyThenSendToClient(world, pos);
 			}
-			if (world.getTotalWorldTime() % 20 == 0) {
+			if (world.getTotalWorldTime() % 20 == 0) { // Every second
 				PacketSyncEnergy packet = new PacketSyncEnergy(pos, energyStorage.getEnergyStored());
 				Program.NETWORK_CLIENT_CHANNEL_ENERGY.sendToAll(packet);
+			}
+			if (world.getTotalWorldTime() % 60 == 0) { // Every 3 seconds
+				// Ensure a smoother effect for charging bar
+				BlockAutoSieve.chargeEnergyThenSendToClient(world, pos);
 			}
 		}
 	}
@@ -72,7 +75,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 
 		for (int i = OUTPUT_START; i <= OUTPUT_END; i++) {
 			if (inventory.getStackInSlot(i).isEmpty()) {
-				inventory.insertItem(i, output, false);
+				inventory.insertItem(i, output.copy(), false);
 				break;
 			}
 		}
@@ -158,22 +161,17 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
-		if (index == INPUT_SLOT || (index >= OUTPUT_START && index <= OUTPUT_END)) {
-			return inventory.extractItem(index, count, false);
-		}
-		return ItemStack.EMPTY;
+		return inventory.extractItem(index, count, false);
 	}
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
-		if (index == INPUT_SLOT) {
-			inventory.setStackInSlot(index, stack);
-		}
+		inventory.setStackInSlot(index, stack);
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		return index == INPUT_SLOT;
+		return true;
 	}
 
 	@Override
@@ -188,10 +186,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
-		if (index >= OUTPUT_START && index <= OUTPUT_END) {
-			return inventory.extractItem(index, inventory.getStackInSlot(index).getCount(), false);
-		}
-		return ItemStack.EMPTY;
+		return inventory.extractItem(index, inventory.getStackInSlot(index).getCount(), false);
 	}
 
 	@Override
