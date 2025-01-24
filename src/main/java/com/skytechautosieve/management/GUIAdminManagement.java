@@ -112,7 +112,7 @@ public class GUIAdminManagement extends GuiScreen {
 			}
 
 			if (repository.getDropData(availableBlocks.get(selectedBlockIndex)).stream()
-					.anyMatch(data -> data.getItem().equals(item))) {
+					.anyMatch(data -> ItemStack.areItemsEqual(item, data.getItem()))) {
 				drawRect(this.width / 2 + 75, drawY - 5, this.width / 2 + 225, drawY + 15, 0x8000FF00);
 			}
 
@@ -130,9 +130,10 @@ public class GUIAdminManagement extends GuiScreen {
 			Block block = availableBlocks.get(selectedBlockIndex);
 			List<SieveDropData> dropData = repository.getDropData(block);
 			ItemStack item = availableDrops.get(selectedDropIndex);
-			boolean existing = dropData.stream().anyMatch(data -> data.getItem().equals(item));
-			Program.NETWORK_SERVER_CHANNEL_SIEVE_DATA.sendToServer(new PacketUpdateSieveData(block.getRegistryName().toString(),
-					item.getItem().getRegistryName().toString(), !existing, dropRate));
+			boolean existing = dropData.stream().anyMatch(data -> ItemStack.areItemsEqual(data.getItem(), item));
+			Program.NETWORK_SERVER_CHANNEL_SIEVE_DATA
+					.sendToServer(new PacketUpdateSieveData(block.getRegistryName().toString(),
+							item.getItem().getRegistryName().toString(), !existing, dropRate));
 		}
 	}
 

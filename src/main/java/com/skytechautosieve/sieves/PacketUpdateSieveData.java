@@ -2,10 +2,13 @@ package com.skytechautosieve.sieves;
 
 import java.util.List;
 
+import com.skytechautosieve.Program;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -73,9 +76,14 @@ public class PacketUpdateSieveData implements IMessage {
 					if (message.isAdding) {
 						drops.add(new SieveDropData(item, message.dropRate));
 					} else {
-						drops.stream().filter(data -> data.getItem().equals(item)).findAny().ifPresent(drops::remove);
+						drops.stream().filter(data -> ItemStack.areItemsEqual(item, data.getItem())).findAny()
+								.ifPresent(drops::remove);
 					}
 					repo.setDropData(block, drops, world);
+					Program.NETWORK_CLIENT_CHANNEL_SIEVE_DATA.sendTo(
+							new PacketSyncSieveData(repo.writeToNBT(new NBTTagCompound())),
+							ctx.getServerHandler().player);
+
 				}
 			});
 			return null;
