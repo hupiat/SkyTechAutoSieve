@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.skytechautosieve.Program;
+import com.skytechautosieve.sieves.PacketUpdateSieveData;
 import com.skytechautosieve.sieves.SieveDropData;
 import com.skytechautosieve.sieves.SieveDropDataRepository;
 
@@ -101,8 +103,8 @@ public class GUIAdminManagement extends GuiScreen {
 
 	private void drawDrops() {
 		for (int i = scrollOffset; i < Math.min(scrollOffset + visibleItems, availableBlocks.size()); i++) {
-			ItemStack stack = availableDrops.get(i);
-			String name = stack.getDisplayName();
+			ItemStack item = availableDrops.get(i);
+			String name = item.getDisplayName();
 			int drawY = 50 + (i - scrollOffset) * itemHeight;
 
 			if (i == selectedDropIndex) {
@@ -110,11 +112,11 @@ public class GUIAdminManagement extends GuiScreen {
 			}
 
 			if (repository.getDropData(availableBlocks.get(selectedBlockIndex)).stream()
-					.anyMatch(data -> data.getItem().equals(stack))) {
+					.anyMatch(data -> data.getItem().equals(item))) {
 				drawRect(this.width / 2 + 75, drawY - 5, this.width / 2 + 225, drawY + 15, 0x8000FF00);
 			}
 
-			this.mc.getRenderItem().renderItemAndEffectIntoGUI(stack, this.width / 2 + 75, drawY - 5);
+			this.mc.getRenderItem().renderItemAndEffectIntoGUI(item, this.width / 2 + 75, drawY - 5);
 			this.fontRenderer.drawSplitString(name, this.width / 2 + 105, drawY, 110, 0XFFFFFF);
 		}
 
@@ -127,15 +129,10 @@ public class GUIAdminManagement extends GuiScreen {
 		if (button.equals(addOrRemoveButton)) {
 			Block block = availableBlocks.get(selectedBlockIndex);
 			List<SieveDropData> dropData = repository.getDropData(block);
-			ItemStack dropStack = availableDrops.get(selectedDropIndex);
-			Optional<SieveDropData> existing = dropData.stream().filter(data -> data.getItem().equals(dropStack))
-					.findAny();
-			if (existing.isPresent()) {
-				dropData.remove(existing.get());
-			} else {
-				dropData.add(new SieveDropData(dropStack, (float) rateSlider.getValue()));
-			}
-			mc.addScheduledTask(() -> repository.setDropData(block, dropData, this.mc.world));
+			ItemStack item = availableDrops.get(selectedDropIndex);
+			boolean existing = dropData.stream().anyMatch(data -> data.getItem().equals(item));
+			Program.NETWORK_CHANNEL.sendToServer(new PacketUpdateSieveData(block.getRegistryName().toString(),
+					item.getItem().getRegistryName().toString(), !existing, dropRate));
 		}
 	}
 

@@ -3,18 +3,25 @@ package com.skytechautosieve;
 import org.lwjgl.input.Keyboard;
 
 import com.skytechautosieve.hud.GUIAdminManagementHUD;
+import com.skytechautosieve.sieves.PacketSyncSieveData;
 import com.skytechautosieve.sieves.SieveDropDataRepository;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 @Mod.EventBusSubscriber
-public class EventsSuscriberHandler {
+public class EventsSuscriberHandler implements IMessageHandler<PacketSyncSieveData, IMessage> {
 
 	private static final KeyBinding OPEN_SIEVE_GUI = new KeyBinding("key.open_sieve_gui", Keyboard.KEY_A,
 			"key.categories.sieve");
@@ -42,4 +49,28 @@ public class EventsSuscriberHandler {
 		}
 	}
 
+	@SubscribeEvent
+	public void onClientConnectedToServer(PlayerEvent.PlayerLoggedInEvent event) {
+		if (!event.player.world.isRemote) {
+			SieveDropDataRepository repo = SieveDropDataRepository.get(event.player.world);
+			if (repo != null) {
+				Program.NETWORK_CHANNEL.sendTo(new PacketSyncSieveData(repo.writeToNBT(new NBTTagCompound())),
+						(EntityPlayerMP) event.player);
+			}
+		}
+	}
+
+	@Override
+	public IMessage onMessage(PacketSyncSieveData message, MessageContext ctx) {
+		Minecraft.getMinecraft().addScheduledTask(() -> {
+			if (Minecraft.getMinecraft().world != null) {
+				SieveDropDataRepository repository = SieveDropDataRepository.get(Minecraft.getMinecraft().world);
+				if (repository != null) {
+					repository.readFromNBT(message.getData());
+					System.out.println("Data received and loaded on client side.");
+				}
+			}
+		});
+		return null;
+	}
 }

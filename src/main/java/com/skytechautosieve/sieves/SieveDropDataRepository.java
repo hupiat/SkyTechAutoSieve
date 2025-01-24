@@ -26,6 +26,8 @@ public class SieveDropDataRepository extends WorldSavedData {
 	public void setDropData(Block block, List<SieveDropData> drops, World world) {
 		sieveData.put(block, drops);
 		markDirty();
+		world.getMapStorage().setData(DATA_NAME, this);
+		world.getMapStorage().saveAllData();
 	}
 
 	public List<SieveDropData> getDropData(Block block) {
