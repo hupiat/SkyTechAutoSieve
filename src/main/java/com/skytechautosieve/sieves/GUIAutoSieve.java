@@ -43,7 +43,7 @@ public class GUIAutoSieve extends GuiContainer {
 
 	private void drawInterface() {
 		this.mc.getTextureManager().bindTexture(TEXTURE);
-		drawTexturedModalRect(guiLeft, guiTop, 0, 0, this.xSize, this.ySize);
+		drawModalRectWithCustomSizedTexture(guiLeft, guiTop, 0, 0, xSize, ySize, xSize, ySize);
 	}
 
 	private void drawEnergyBar() {
