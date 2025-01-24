@@ -19,8 +19,8 @@ import net.minecraftforge.items.ItemStackHandler;
 public class TileEntityAutoSieve extends TileEntity implements ITickable, IInventory {
 
 	public static final int INPUT_SLOT = 0;
-	public static final int OUTPUT_START = 23;
-	public static final int OUTPUT_END = 47;
+	public static final int OUTPUT_START = 24;
+	public static final int OUTPUT_END = 48;
 	public static final int TOTAL_SLOTS = 48;
 
 	public static final int MAX_ENERGY = 10000;
@@ -49,8 +49,18 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 				Program.NETWORK_CLIENT_CHANNEL_ENERGY.sendToAll(packet);
 			}
 			if (world.getTotalWorldTime() % 60 == 0) { // Every 3 seconds
-				// Ensure a smoother effect for charging bar
+				// Ensure a smoother effect for charging bar than a shorter delay
 				BlockAutoSieve.chargeEnergyThenSendToClient(world, pos);
+				// Performing a left shifting to process all items
+				for (int i = INPUT_SLOT; i < OUTPUT_START - 1; i++) {
+					if (inventory.getStackInSlot(i).isEmpty()) {
+						ItemStack nextStack = inventory.getStackInSlot(i + 1);
+						if (!nextStack.isEmpty()) {
+							inventory.setStackInSlot(i, nextStack);
+							inventory.setStackInSlot(i + 1, ItemStack.EMPTY);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -61,7 +71,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	}
 
 	private boolean hasOutputSpace() {
-		for (int i = OUTPUT_START; i <= OUTPUT_END; i++) {
+		for (int i = OUTPUT_START; i < OUTPUT_END; i++) {
 			if (inventory.getStackInSlot(i).isEmpty()) {
 				return true;
 			}
@@ -73,7 +83,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 		inventory.extractItem(INPUT_SLOT, 1, false);
 		ItemStack output = new ItemStack(Items.DIAMOND, 1); // Example output
 
-		for (int i = OUTPUT_START; i <= OUTPUT_END; i++) {
+		for (int i = OUTPUT_START; i < OUTPUT_END; i++) {
 			if (inventory.getStackInSlot(i).isEmpty()) {
 				inventory.insertItem(i, output, false);
 				break;

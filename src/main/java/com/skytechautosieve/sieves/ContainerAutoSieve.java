@@ -19,16 +19,21 @@ public class ContainerAutoSieve extends Container {
 		int startY = -10;
 		int slotSize = 18;
 
-		int counter = 0;
+		int counterLeft = 0;
+		int counterRight = 24;
 		for (int row = 0; row < 6; row++) {
 			startX = 8;
 			for (int col = 0; col < 8; col++) {
 				if (col == 4) {
 					startX = 26;
 				}
-				this.addSlotToContainer(
-						new Slot(tileEntity, counter, startX + col * slotSize, startY + row * slotSize));
-				counter++;
+				this.addSlotToContainer(new Slot(tileEntity, col >= 4 ? counterRight : counterLeft,
+						startX + col * slotSize, startY + row * slotSize));
+				if (col >= 4) {
+					counterRight++;
+				} else {
+					counterLeft++;
+				}
 			}
 		}
 
