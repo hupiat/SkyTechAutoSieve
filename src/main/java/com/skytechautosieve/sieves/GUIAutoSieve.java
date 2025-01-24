@@ -53,7 +53,7 @@ public class GUIAutoSieve extends GuiContainer {
 		int energyHeight = maxEnergy > 0 ? (int) ((currentEnergy / (float) maxEnergy) * 50) : 0;
 
 		int energyBarX = guiLeft + 82;
-		int energyBarY = guiTop + 50 + (50 - energyHeight);
+		int energyBarY = guiTop + 50 + (20 - energyHeight);
 		int energyBarWidth = 11;
 		int energyBarMaxHeight = 80;
 
