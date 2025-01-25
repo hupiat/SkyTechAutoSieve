@@ -108,16 +108,16 @@ public class GUIAdminManagement extends GuiScreen {
 			int drawY = 50 + (i - scrollOffset) * itemHeight;
 
 			if (i == selectedDropIndex) {
-				drawRect(this.width / 2 + 75, drawY - 5, this.width / 2 + 225, drawY + 15, 0x80FFFFFF);
+				drawRect(this.width - 30 - 110, drawY - 5, this.width, drawY + 15, 0x80FFFFFF);
 			}
 
 			if (repository.getDropData(availableBlocks.get(selectedBlockIndex)).stream()
 					.anyMatch(data -> ItemStack.areItemsEqual(item, data.getItem()))) {
-				drawRect(this.width / 2 + 75, drawY - 5, this.width / 2 + 225, drawY + 15, 0x8000FF00);
+				drawRect(this.width - 30 - 110, drawY - 5, this.width, drawY + 15, 0x8000FF00);
 			}
 
-			this.mc.getRenderItem().renderItemAndEffectIntoGUI(item, this.width / 2 + 75, drawY - 5);
-			this.fontRenderer.drawSplitString(name, this.width / 2 + 105, drawY, 110, 0XFFFFFF);
+			this.mc.getRenderItem().renderItemAndEffectIntoGUI(item, this.width - 30, drawY - 5);
+			this.fontRenderer.drawSplitString(name, this.width - 30 - 110, drawY, 110, 0XFFFFFF);
 		}
 
 	}
