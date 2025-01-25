@@ -1,2 +1,4 @@
 tile.auto_sieve.name=Sift Machine
 sounds.skytechautosieve.sift_action=Sifting in progress...
+item.skytechautosieve.fortune_upgrade.name=Fortune Upgrade
+item.skytechautosieve.speed_upgrade.name=Speed Upgrade
