@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 @Mod.EventBusSubscriber
-public class EventsSuscriberHandler {
+public class EventsSubscriberHandler {
 
 	private static final KeyBinding OPEN_SIEVE_GUI = new KeyBinding("key.open_sieve_gui", Keyboard.KEY_A,
 			"key.categories.sieve");

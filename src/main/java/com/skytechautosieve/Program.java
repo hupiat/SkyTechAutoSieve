@@ -33,8 +33,8 @@ public class Program {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		MinecraftForge.EVENT_BUS.register(new BlocksSuscriberHandler());
-		MinecraftForge.EVENT_BUS.register(new EventsSuscriberHandler());
+		MinecraftForge.EVENT_BUS.register(new BlocksSubscriberHandler());
+		MinecraftForge.EVENT_BUS.register(new EventsSubscriberHandler());
 		GameRegistry.registerTileEntity(TileEntityAutoSieve.class, new ResourceLocation("skytechautosieve:autosieve"));
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 		NETWORK_SERVER_CHANNEL_SIEVE_DATA.registerMessage(PacketUpdateSieveData.Handler.class,

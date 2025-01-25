@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Mod.EventBusSubscriber
-public class BlocksSuscriberHandler {
+public class BlocksSubscriberHandler {
 	public static final BlockAutoSieve AUTO_SIEVE = new BlockAutoSieve();
 	public static final Item SPEED_UPGRADE = new ItemSpeedUpgrade();
 	public static final Item FORTUNE_UPGRADE = new ItemFortuneUpgrade();

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.skytechautosieve.BlocksSuscriberHandler;
+import com.skytechautosieve.BlocksSubscriberHandler;
 import com.skytechautosieve.Program;
 import com.skytechautosieve.sieves.data.SieveDropData;
 import com.skytechautosieve.sieves.data.SieveDropDataRepository;
@@ -86,10 +86,10 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 				this.hasSpeedUpgrade = false;
 				if (!inventory.getStackInSlot(UPGRADE_SLOT - 1).isEmpty()) {
 					ItemStack upgrade = inventory.extractItem(UPGRADE_SLOT - 1, 1, false);
-					if (upgrade.getItem() == BlocksSuscriberHandler.FORTUNE_UPGRADE) {
+					if (upgrade.getItem() == BlocksSubscriberHandler.FORTUNE_UPGRADE) {
 						this.hasFortuneUpgrade = true;
 					}
-					if (upgrade.getItem() == BlocksSuscriberHandler.SPEED_UPGRADE) {
+					if (upgrade.getItem() == BlocksSubscriberHandler.SPEED_UPGRADE) {
 						this.hasSpeedUpgrade = true;
 					}
 				}
@@ -117,8 +117,9 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 		List<ItemStack> outputs = new ArrayList<>();
 		for (SieveDropData dropData : repository.getDropData(Block.getBlockFromItem(consumed.getItem()))) {
 			Random rand = new Random();
-			int rate = rand.nextInt(1);
-			if (rate < (hasFortuneUpgrade ? dropData.getDropRate() * rand.nextInt(5) : dropData.getDropRate())) {
+			int rate = rand.nextInt(100);
+			if (rate < (hasFortuneUpgrade ? dropData.getDropRate() * 100 * rand.nextInt(5)
+					: dropData.getDropRate() * 100)) {
 				outputs.add(dropData.getItem());
 			}
 		}
@@ -223,8 +224,8 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
 		if (index == UPGRADE_SLOT - 1) {
-			if (stack.getItem() != BlocksSuscriberHandler.FORTUNE_UPGRADE
-					&& stack.getItem() != BlocksSuscriberHandler.SPEED_UPGRADE) {
+			if (stack.getItem() != BlocksSubscriberHandler.FORTUNE_UPGRADE
+					&& stack.getItem() != BlocksSubscriberHandler.SPEED_UPGRADE) {
 				inventory.setStackInSlot(index, ItemStack.EMPTY);
 				return;
 			}
