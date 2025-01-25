@@ -39,6 +39,7 @@ public class GUIAutoSieve extends GuiContainer {
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		this.fontRenderer.drawString("Input", 8, -20, 0x404040);
 		this.fontRenderer.drawString("Output", 98, -20, 0x404040);
+		this.fontRenderer.drawString("Bonus slot", 102, 90, 0x404040);
 	}
 
 	private void drawInterface() {

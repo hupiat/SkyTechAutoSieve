@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = "skytechautosieve", name = "SkyTechAutoSieve", version = "1.0.0")
+@Mod(modid = "skytechautosieve", name = "SkyTechAutoSieve", version = "1.0.1")
 public class Program {
 
 	public static Program instance = null;

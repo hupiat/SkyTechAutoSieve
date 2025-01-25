@@ -14,14 +14,14 @@ public class ContainerAutoSieve extends Container {
 	public ContainerAutoSieve(InventoryPlayer playerInv, TileEntityAutoSieve tileEntity) {
 		this.tileInventory = tileEntity;
 
-		// Add tile entity slots (6 rows, 8 columns divided in 2 parts so 4 by each)
+		// Add tile entity slots (5 rows, 8 columns divided in 2 parts so 4 by each)
 		int startX = 8;
 		int startY = -10;
 		int slotSize = 18;
 
 		int counterLeft = 0;
-		int counterRight = 24;
-		for (int row = 0; row < 6; row++) {
+		int counterRight = 20;
+		for (int row = 0; row < 5; row++) {
 			startX = 8;
 			for (int col = 0; col < 8; col++) {
 				if (col == 4) {
@@ -36,6 +36,8 @@ public class ContainerAutoSieve extends Container {
 				}
 			}
 		}
+
+		this.addSlotToContainer(new Slot(tileEntity, 40, 80, 86));
 
 		// Add player inventory slots (3 rows, 9 columns)
 		startX = 8;

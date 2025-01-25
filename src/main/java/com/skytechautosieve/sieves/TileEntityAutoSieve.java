@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.skytechautosieve.BlocksSuscriberHandler;
 import com.skytechautosieve.Program;
 import com.skytechautosieve.sieves.data.SieveDropData;
 import com.skytechautosieve.sieves.data.SieveDropDataRepository;
@@ -25,9 +26,10 @@ import net.minecraftforge.items.ItemStackHandler;
 public class TileEntityAutoSieve extends TileEntity implements ITickable, IInventory {
 
 	public static final int INPUT_SLOT = 0;
-	public static final int OUTPUT_START = 24;
-	public static final int OUTPUT_END = 48;
-	public static final int TOTAL_SLOTS = 48;
+	public static final int OUTPUT_START = 20;
+	public static final int OUTPUT_END = 40;
+	public static final int UPGRADE_SLOT = 41;
+	public static final int TOTAL_SLOTS = 41;
 
 	public static final int MAX_ENERGY = 10000;
 	private final ItemStackHandler inventory = new ItemStackHandler(TOTAL_SLOTS);
@@ -38,6 +40,9 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	private static final int PROCESS_TIME_REQUIRED = 100;
 
 	private SieveDropDataRepository repository = null;
+
+	private boolean hasFortuneUpgrade = false;
+	private boolean hasSpeedUpgrade = false;
 
 	@Override
 	public void onLoad() {
@@ -51,7 +56,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 			if (canSift() && energyStorage.getEnergyStored() >= ENERGY_PER_TICK) {
 				processTime++;
 				energyStorage.extractEnergy(ENERGY_PER_TICK, false);
-				if (processTime >= PROCESS_TIME_REQUIRED) {
+				if (processTime >= (hasSpeedUpgrade ? PROCESS_TIME_REQUIRED / 5 : PROCESS_TIME_REQUIRED)) {
 					processSieve();
 					processTime = 0;
 				}
@@ -73,6 +78,19 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 							inventory.setStackInSlot(i, nextStack);
 							inventory.setStackInSlot(i + 1, ItemStack.EMPTY);
 						}
+					}
+				}
+			}
+			if (world.getTotalWorldTime() % 600 == 0) { // Every 30 seconds
+				this.hasFortuneUpgrade = false;
+				this.hasSpeedUpgrade = false;
+				if (!inventory.getStackInSlot(UPGRADE_SLOT - 1).isEmpty()) {
+					ItemStack upgrade = inventory.extractItem(UPGRADE_SLOT - 1, 1, false);
+					if (upgrade.getItem() == BlocksSuscriberHandler.FORTUNE_UPGRADE) {
+						this.hasFortuneUpgrade = true;
+					}
+					if (upgrade.getItem() == BlocksSuscriberHandler.SPEED_UPGRADE) {
+						this.hasSpeedUpgrade = true;
 					}
 				}
 			}
@@ -100,7 +118,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 		for (SieveDropData dropData : repository.getDropData(Block.getBlockFromItem(consumed.getItem()))) {
 			Random rand = new Random();
 			int rate = rand.nextInt(1);
-			if (rate < dropData.getDropRate()) {
+			if (rate < (hasFortuneUpgrade ? dropData.getDropRate() * rand.nextInt(5) : dropData.getDropRate())) {
 				outputs.add(dropData.getItem());
 			}
 		}
@@ -204,6 +222,14 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
+		if (index == UPGRADE_SLOT - 1) {
+			if (stack.getItem() != BlocksSuscriberHandler.FORTUNE_UPGRADE
+					&& stack.getItem() != BlocksSuscriberHandler.SPEED_UPGRADE) {
+				inventory.setStackInSlot(index, ItemStack.EMPTY);
+				return;
+			}
+		}
+
 		inventory.setStackInSlot(index, stack);
 		markDirty();
 	}
