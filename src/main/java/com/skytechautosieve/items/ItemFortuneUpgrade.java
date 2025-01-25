@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 public class ItemFortuneUpgrade extends Item {
 	public ItemFortuneUpgrade() {
 		setRegistryName("fortune_upgrade");
-		setTranslationKey("fortune_upgrade");
+		setTranslationKey("skytechautosieve.fortune_upgrade");
 		setCreativeTab(CreativeTabs.MISC);
 	}
 }

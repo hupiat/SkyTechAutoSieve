@@ -38,5 +38,9 @@ public class BlocksSuscriberHandler {
 	public static void registerModels(ModelRegistryEvent event) {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(AUTO_SIEVE), 0,
 				new ModelResourceLocation("skytechautosieve:auto_sieve", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(SPEED_UPGRADE, 0,
+				new ModelResourceLocation("skytechautosieve:speed_upgrade", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(FORTUNE_UPGRADE, 0,
+				new ModelResourceLocation("skytechautosieve:fortune_upgrade", "inventory"));
 	}
 }
