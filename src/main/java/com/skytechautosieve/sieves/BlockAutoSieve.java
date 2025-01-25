@@ -61,7 +61,6 @@ public class BlockAutoSieve extends Block {
 			boolean poweredByRedstone = world.isBlockPowered(pos);
 			boolean receivedEnergy = false;
 
-			// Check all sides for energy input from external mods
 			for (EnumFacing facing : EnumFacing.values()) {
 				TileEntity neighbor = world.getTileEntity(pos.offset(facing));
 
@@ -73,27 +72,22 @@ public class BlockAutoSieve extends Block {
 
 						if (energyNeeded > 0) {
 							int extractedEnergy = energyStorage.extractEnergy(energyNeeded, false);
-							System.out.println(extractedEnergy);
 							if (extractedEnergy > 0) {
 								sieve.setField(1, currentEnergy + extractedEnergy);
 								receivedEnergy = true;
-								System.out.println("Received " + extractedEnergy + " FE from "
-										+ neighbor.getBlockType().getLocalizedName());
-								break; // Stop once energy is received
+								break;
 							}
 						}
 					}
 				}
 			}
 
-			// If no external energy, check redstone power as a fallback
 			if (poweredByRedstone && !receivedEnergy && currentEnergy < maxEnergy) {
 				sieve.setField(1, maxEnergy);
 				receivedEnergy = true;
 				System.out.println("Fully charged by redstone signal.");
 			}
 
-			// Send energy update to clients only if it changed
 			if (receivedEnergy && sieve.getEnergyStored() != currentEnergy) {
 				Program.NETWORK_CLIENT_CHANNEL_ENERGY.sendToAll(new PacketSyncEnergy(pos, sieve.getEnergyStored()));
 			}
