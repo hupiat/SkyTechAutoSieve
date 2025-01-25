@@ -173,7 +173,8 @@ public class GUIAdminManagement extends GuiScreen {
 					this.buttonList.add(addOrRemoveButton);
 					this.buttonList.add(rateSlider);
 					Optional<SieveDropData> existing = repository.getDropData(availableBlocks.get(selectedBlockIndex))
-							.stream().filter(data -> data.getItem().equals(availableDrops.get(selectedDropIndex)))
+							.stream().filter(data -> ItemStack.areItemsEqual(availableDrops.get(selectedDropIndex),
+									data.getItem()))
 							.findAny();
 					if (existing.isPresent()) {
 						this.rateSlider.setValue(existing.get().getDropRate());

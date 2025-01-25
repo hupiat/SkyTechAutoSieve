@@ -1,10 +1,16 @@
 package com.skytechautosieve.sieves;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import com.skytechautosieve.Program;
+import com.skytechautosieve.sieves.data.SieveDropData;
+import com.skytechautosieve.sieves.data.SieveDropDataRepository;
 import com.skytechautosieve.sieves.networking.PacketSyncEnergy;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,6 +36,14 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	private static final int ENERGY_PER_TICK = 100;
 	private int processTime = 0;
 	private static final int PROCESS_TIME_REQUIRED = 100;
+
+	private SieveDropDataRepository repository = null;
+
+	@Override
+	public void onLoad() {
+		repository = SieveDropDataRepository.get(world);
+		super.onLoad();
+	}
 
 	@Override
 	public void update() {
@@ -80,13 +94,23 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	}
 
 	private void processSieve() {
-		inventory.extractItem(INPUT_SLOT, 1, false);
-		ItemStack output = new ItemStack(Items.DIAMOND, 1); // Example output
+		ItemStack consumed = inventory.extractItem(INPUT_SLOT, 1, false);
 
-		for (int i = OUTPUT_START; i < OUTPUT_END; i++) {
-			if (inventory.getStackInSlot(i).isEmpty()) {
-				inventory.insertItem(i, output, false);
-				break;
+		List<ItemStack> outputs = new ArrayList<>();
+		for (SieveDropData dropData : repository.getDropData(Block.getBlockFromItem(consumed.getItem()))) {
+			Random rand = new Random();
+			int rate = rand.nextInt(1);
+			if (rate < dropData.getDropRate()) {
+				outputs.add(dropData.getItem());
+			}
+		}
+		for (ItemStack output : outputs) {
+			boolean placed = false;
+			for (int i = OUTPUT_START; i < OUTPUT_END && !placed; i++) {
+				if (inventory.getStackInSlot(i).isEmpty()) {
+					inventory.insertItem(i, output, false);
+					placed = true;
+				}
 			}
 		}
 	}
