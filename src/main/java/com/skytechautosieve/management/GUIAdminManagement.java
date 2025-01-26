@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.skytechautosieve.Program;
 import com.skytechautosieve.sieves.data.SieveDropData;
@@ -14,9 +15,11 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StringUtils;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
 public class GUIAdminManagement extends GuiScreen {
@@ -25,6 +28,8 @@ public class GUIAdminManagement extends GuiScreen {
 
 	private GuiButton addOrRemoveButton;
 	private GuiSlider rateSlider;
+	private GuiTextField searchBlocksField;
+	private GuiTextField searchDropsField;
 
 	private List<Block> availableBlocks;
 	private List<ItemStack> availableDrops;
@@ -64,10 +69,13 @@ public class GUIAdminManagement extends GuiScreen {
 
 		this.addOrRemoveButton = new GuiButton(0, this.width / 2 - 50, this.height - 30, 100, 20, "Add or Remove");
 
-		this.rateSlider = new GuiSlider(2, this.width / 2 - 50, this.height - 90, 100, 20, "Drop Rate: ", "", 0.0F,
+		this.rateSlider = new GuiSlider(1, this.width / 2 - 50, this.height - 90, 100, 20, "Drop Rate: ", "", 0.0F,
 				1.0F, dropRate, true, true, (slider) -> {
 					dropRate = (float) slider.getValue();
 				});
+
+		this.searchBlocksField = new GuiTextField(2, fontRenderer, 0 + 20, 10, 100, 20);
+		this.searchDropsField = new GuiTextField(3, fontRenderer, this.width - 100 - 20, 10, 100, 20);
 	}
 
 	private int scrollOffset = 0;
@@ -78,15 +86,22 @@ public class GUIAdminManagement extends GuiScreen {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
+		this.searchBlocksField.drawTextBox();
+		this.searchDropsField.drawTextBox();
+		this.searchBlocksField.updateCursorCounter();
+		this.searchDropsField.updateCursorCounter();
 		drawBlocks();
 		if (selectedBlockIndex >= 0) {
 			drawDrops();
 		}
 		super.drawScreen(mouseX, mouseY, partialTicks);
-		this.drawCenteredString(this.fontRenderer, "Select Block and Drop", this.width / 2, 20, 0xFFFFFF);
 	}
 
 	private void drawBlocks() {
+		List<Block> availableBlocks = this.availableBlocks.stream()
+				.filter(block -> isMatchingSearchQuery(block.getLocalizedName(), searchBlocksField))
+				.collect(Collectors.toList());
+
 		for (int i = scrollOffset; i < Math.min(scrollOffset + visibleItems, availableBlocks.size()); i++) {
 			Block block = availableBlocks.get(i);
 			ItemStack stack = new ItemStack(block);
@@ -104,7 +119,11 @@ public class GUIAdminManagement extends GuiScreen {
 	}
 
 	private void drawDrops() {
-		for (int i = scrollOffset; i < Math.min(scrollOffset + visibleItems, availableBlocks.size()); i++) {
+		List<ItemStack> availableDrops = this.availableDrops.stream()
+				.filter(drop -> isMatchingSearchQuery(drop.getDisplayName(), searchDropsField))
+				.collect(Collectors.toList());
+
+		for (int i = scrollOffset; i < Math.min(scrollOffset + visibleItems, availableDrops.size()); i++) {
 			ItemStack item = availableDrops.get(i);
 			String name = item.getDisplayName();
 			int drawY = 50 + (i - scrollOffset) * itemHeight;
@@ -121,7 +140,20 @@ public class GUIAdminManagement extends GuiScreen {
 			this.mc.getRenderItem().renderItemAndEffectIntoGUI(item, this.width - 30, drawY - 5);
 			this.fontRenderer.drawSplitString(name, this.width - 30 - 110, drawY, 110, 0XFFFFFF);
 		}
+	}
 
+	private boolean isMatchingSearchQuery(String name, GuiTextField searchField) {
+		if (!StringUtils.isNullOrEmpty(searchField.getText())) {
+			boolean matching = false;
+			for (String word : name.toLowerCase().split(" ")) {
+				if (word.startsWith(searchField.getText().toLowerCase())) {
+					matching = true;
+					break;
+				}
+			}
+			return matching;
+		}
+		return true;
 	}
 
 	// Callbacks
@@ -140,13 +172,31 @@ public class GUIAdminManagement extends GuiScreen {
 	}
 
 	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException {
+		this.searchBlocksField.textboxKeyTyped(typedChar, keyCode);
+		this.searchDropsField.textboxKeyTyped(typedChar, keyCode);
+		if (!StringUtils.isNullOrEmpty(searchDropsField.getText())) {
+			selectedDropIndex = -1;
+			this.buttonList.clear();
+		}
+		if (!StringUtils.isNullOrEmpty(searchBlocksField.getText())) {
+			selectedBlockIndex = -1;
+			this.buttonList.clear();
+		}
+		super.keyTyped(typedChar, keyCode);
+	}
+
+	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 
+		searchBlocksField.mouseClicked(mouseX, mouseY, mouseButton);
+		searchDropsField.mouseClicked(mouseX, mouseY, mouseButton);
+
 		int blockStartY = 50;
 		int dropStartY = 50;
-		int blockStartX = 30;
-		int dropStartX = this.width / 2 + 75;
+		int blockStartX = 0;
+		int dropStartX = this.width - 140;
 
 		int newSelectedBlockIndex = -1, newSelectedDropIndex = 1;
 		for (int i = 0; i < visibleItems; i++) {
