@@ -11,6 +11,7 @@ import com.skytechautosieve.sieves.data.SieveDropDataRepository;
 import com.skytechautosieve.sieves.networking.PacketUpdateSieveData;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.Item;
@@ -70,7 +71,8 @@ public class GUIAdminManagement extends GuiScreen {
 	}
 
 	private int scrollOffset = 0;
-	private int visibleItems = 10;
+	private int visibleItems = Minecraft.getMinecraft().gameSettings.guiScale == 1
+			|| Minecraft.getMinecraft().gameSettings.guiScale == 2 ? 20 : 10;
 	private int itemHeight = 20;
 
 	@Override
