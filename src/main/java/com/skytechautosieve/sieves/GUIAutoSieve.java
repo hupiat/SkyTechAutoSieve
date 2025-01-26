@@ -13,12 +13,10 @@ public class GUIAutoSieve extends GuiContainer {
 	private int xSize = 176;
 	private int ySize = 221;
 
-	private final InventoryPlayer playerInventory;
 	private final TileEntityAutoSieve tileEntity;
 
 	public GUIAutoSieve(InventoryPlayer playerInv, TileEntityAutoSieve tileEntity) {
 		super(new ContainerAutoSieve(playerInv, tileEntity));
-		this.playerInventory = playerInv;
 		this.tileEntity = tileEntity;
 	}
 
