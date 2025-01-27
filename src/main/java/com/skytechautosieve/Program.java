@@ -1,5 +1,6 @@
 package com.skytechautosieve;
 
+import com.skytechautosieve.sieves.AutoSieveGuiHandler;
 import com.skytechautosieve.sieves.TileEntityAutoSieve;
 import com.skytechautosieve.sieves.networking.PacketSyncEnergy;
 import com.skytechautosieve.sieves.networking.PacketSyncSieveData;
@@ -38,7 +39,7 @@ public class Program {
 
 		GameRegistry.registerTileEntity(TileEntityAutoSieve.class, new ResourceLocation("skytechautosieve:autosieve"));
 
-		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new AutoSieveGuiHandler());
 
 		NETWORK_SERVER_CHANNEL_SIEVE_DATA.registerMessage(PacketUpdateSieveData.Handler.class,
 				PacketUpdateSieveData.class, 0, Side.SERVER);

@@ -1,15 +1,11 @@
-package com.skytechautosieve;
-
-import com.skytechautosieve.sieves.ContainerAutoSieve;
-import com.skytechautosieve.sieves.GUIAutoSieve;
-import com.skytechautosieve.sieves.TileEntityAutoSieve;
+package com.skytechautosieve.sieves;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
-public class GuiHandler implements IGuiHandler {
+public class AutoSieveGuiHandler implements IGuiHandler {
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
