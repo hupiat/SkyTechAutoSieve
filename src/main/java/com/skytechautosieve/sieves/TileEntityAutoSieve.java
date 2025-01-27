@@ -28,8 +28,9 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	public static final int INPUT_SLOT = 0;
 	public static final int OUTPUT_START = 20;
 	public static final int OUTPUT_END = 40;
-	public static final int UPGRADE_SLOT = 41;
-	public static final int TOTAL_SLOTS = 41;
+	public static final int UPGRADE_SLOT_START = 41;
+	public static final int UPGRADE_SLOT_END = 42;
+	public static final int TOTAL_SLOTS = 42;
 
 	public static final int MAX_ENERGY = 10000;
 	private final ItemStackHandler inventory = new ItemStackHandler(TOTAL_SLOTS);
@@ -52,8 +53,9 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 
 	@Override
 	public void update() {
+		boolean canSift = canSift() && energyStorage.getEnergyStored() >= ENERGY_PER_TICK;
 		if (!world.isRemote) {
-			if (canSift() && energyStorage.getEnergyStored() >= ENERGY_PER_TICK) {
+			if (canSift) {
 				processTime++;
 				energyStorage.extractEnergy(ENERGY_PER_TICK, false);
 				if (processTime >= (hasSpeedUpgrade ? PROCESS_TIME_REQUIRED / 5 : PROCESS_TIME_REQUIRED)) {
@@ -70,6 +72,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 			if (world.getTotalWorldTime() % 60 == 0) { // Every 3 seconds
 				// Ensure a smoother effect for charging bar than a shorter delay
 				BlockAutoSieve.chargeEnergyThenSendToClient(world, pos);
+
 				// Performing a left shifting to process all items
 				for (int i = INPUT_SLOT; i < OUTPUT_START - 1; i++) {
 					if (inventory.getStackInSlot(i).isEmpty()) {
@@ -80,17 +83,21 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 						}
 					}
 				}
-			}
-			if (world.getTotalWorldTime() % 600 == 0) { // Every 30 seconds
+
+				// Processing upgrades slots
 				this.hasFortuneUpgrade = false;
 				this.hasSpeedUpgrade = false;
-				if (!inventory.getStackInSlot(UPGRADE_SLOT - 1).isEmpty()) {
-					ItemStack upgrade = inventory.extractItem(UPGRADE_SLOT - 1, 1, false);
-					if (upgrade.getItem() == BlocksSubscriberHandler.FORTUNE_UPGRADE) {
-						this.hasFortuneUpgrade = true;
-					}
-					if (upgrade.getItem() == BlocksSubscriberHandler.SPEED_UPGRADE) {
-						this.hasSpeedUpgrade = true;
+				if (canSift) {
+					for (int i = UPGRADE_SLOT_START; i <= UPGRADE_SLOT_END; i++) {
+						if (!inventory.getStackInSlot(i - 1).isEmpty()) {
+							ItemStack upgrade = inventory.extractItem(i - 1, 1, false);
+							if (upgrade.getItem() == BlocksSubscriberHandler.FORTUNE_UPGRADE) {
+								this.hasFortuneUpgrade = true;
+							}
+							if (upgrade.getItem() == BlocksSubscriberHandler.SPEED_UPGRADE) {
+								this.hasSpeedUpgrade = true;
+							}
+						}
 					}
 				}
 			}
@@ -223,7 +230,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
-		if (index == UPGRADE_SLOT - 1) {
+		if (index == UPGRADE_SLOT_START - 1 || index == UPGRADE_SLOT_END) {
 			if (stack.getItem() != BlocksSubscriberHandler.FORTUNE_UPGRADE
 					&& stack.getItem() != BlocksSubscriberHandler.SPEED_UPGRADE) {
 				inventory.setStackInSlot(index, ItemStack.EMPTY);

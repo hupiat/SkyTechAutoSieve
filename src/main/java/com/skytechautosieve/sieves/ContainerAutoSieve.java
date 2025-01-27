@@ -16,7 +16,7 @@ public class ContainerAutoSieve extends Container {
 
 		// Add tile entity slots (5 rows, 8 columns divided in 2 parts so 4 by each)
 		int startX = 8;
-		int startY = -10;
+		int startY = -9;
 		int slotSize = 18;
 
 		int counterLeft = 0;
@@ -37,7 +37,10 @@ public class ContainerAutoSieve extends Container {
 			}
 		}
 
-		this.addSlotToContainer(new Slot(tileEntity, 40, 80, 86));
+		// Add upgrade slots
+
+		this.addSlotToContainer(new Slot(tileEntity, 40, 68, 88));
+		this.addSlotToContainer(new Slot(tileEntity, 41, 92, 88));
 
 		// Add player inventory slots (3 rows, 9 columns)
 		startX = 8;
