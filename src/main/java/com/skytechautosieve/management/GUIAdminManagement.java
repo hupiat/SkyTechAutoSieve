@@ -86,6 +86,7 @@ public class GUIAdminManagement extends GuiScreen {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
+		this.drawCenteredString(this.fontRenderer, "Select Block and Drop", this.width / 2, 20, 0xFFFFFF);
 		this.searchBlocksField.drawTextBox();
 		this.searchDropsField.drawTextBox();
 		this.searchBlocksField.updateCursorCounter();

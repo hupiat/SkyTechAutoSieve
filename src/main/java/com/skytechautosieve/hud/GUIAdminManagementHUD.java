@@ -1,6 +1,7 @@
 package com.skytechautosieve.hud;
 
 import com.skytechautosieve.management.GUIAdminManagement;
+import com.skytechautosieve.utils.InternalTools;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -25,7 +26,7 @@ public class GUIAdminManagementHUD extends GuiScreen {
 
 	@Override
 	protected void actionPerformed(GuiButton button) {
-		if (button == adminMenuButton) {
+		if (button == adminMenuButton && InternalTools.isPlayerAdmin(this.mc.player)) {
 			mc.displayGuiScreen(new GUIAdminManagement());
 		}
 	}
