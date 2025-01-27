@@ -1,4 +1,4 @@
-package com.skytechautosieve.sieves;
+package com.skytechautosieve.sieves.renders;
 
 import org.lwjgl.opengl.GL11;
 

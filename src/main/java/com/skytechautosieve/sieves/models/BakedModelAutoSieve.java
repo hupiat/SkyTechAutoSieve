@@ -1,4 +1,4 @@
-package com.skytechautosieve.sieves;
+package com.skytechautosieve.sieves.models;
 
 import java.util.List;
 

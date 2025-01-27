@@ -2,11 +2,11 @@ package com.skytechautosieve;
 
 import com.skytechautosieve.items.ItemFortuneUpgrade;
 import com.skytechautosieve.items.ItemSpeedUpgrade;
-import com.skytechautosieve.sieves.BakedModelAutoSieve;
 import com.skytechautosieve.sieves.BlockAutoSieve;
-import com.skytechautosieve.sieves.RenderBlockAutoSieve;
-import com.skytechautosieve.sieves.RenderItemAutoSieve;
 import com.skytechautosieve.sieves.TileEntityAutoSieve;
+import com.skytechautosieve.sieves.models.BakedModelAutoSieve;
+import com.skytechautosieve.sieves.renders.RenderBlockAutoSieve;
+import com.skytechautosieve.sieves.renders.RenderItemAutoSieve;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;

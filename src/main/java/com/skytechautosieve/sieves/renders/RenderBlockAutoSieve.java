@@ -1,6 +1,9 @@
-package com.skytechautosieve.sieves;
+package com.skytechautosieve.sieves.renders;
 
 import org.lwjgl.opengl.GL11;
+
+import com.skytechautosieve.sieves.TileEntityAutoSieve;
+import com.skytechautosieve.sieves.models.ModelAutoSieve;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
