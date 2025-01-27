@@ -153,6 +153,10 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 		return energyStorage.getMaxEnergyStored();
 	}
 
+	public ItemStack getConsumedBlock() {
+		return inventory.getStackInSlot(INPUT_SLOT);
+	}
+
 	@Override
 	public int getField(int id) {
 		switch (id) {

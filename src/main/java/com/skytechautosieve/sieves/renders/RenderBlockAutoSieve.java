@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import com.skytechautosieve.sieves.TileEntityAutoSieve;
 import com.skytechautosieve.sieves.models.ModelAutoSieve;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 
@@ -24,6 +25,28 @@ public class RenderBlockAutoSieve extends TileEntitySpecialRenderer<TileEntityAu
 
 		this.bindTexture(TEXTURE);
 		model.simpleRender(0.0625F);
+
+		GL11.glPopMatrix();
+
+		renderConsumedBlock(te, x, y, z);
+	}
+
+	private void renderConsumedBlock(TileEntityAutoSieve te, double x, double y, double z) {
+		if (te.getConsumedBlock().isEmpty()) {
+			return;
+		}
+
+		GL11.glPushMatrix();
+
+		GL11.glTranslated(x + 0.5, y + 0.75, z + 0.5);
+		GL11.glScalef(1F, 1F, 1F);
+
+		net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
+
+		Minecraft.getMinecraft().getRenderItem().renderItem(te.getConsumedBlock(),
+				net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType.GROUND);
+
+		net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
 
 		GL11.glPopMatrix();
 	}
