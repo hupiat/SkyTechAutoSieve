@@ -1,6 +1,15 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "skytechautosieve:blocks/auto_sieve"
-  }
+    "particle": "skytechautosieve:blocks/auto_sieve"
+  },
+  "elements": [
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 16, 0.1 ],
+      "faces": {
+        "south": { "texture": "#particle" }
+      }
+    }
+  ]
 }
