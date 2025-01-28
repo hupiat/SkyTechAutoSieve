@@ -22,6 +22,7 @@ import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityAutoSieve extends TileEntity implements ITickable, IInventory {
@@ -199,11 +200,9 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 		return inventory;
 	}
 
-	// Capability handling for Forge compatibility (energy and item inventory)
-
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if (capability == CapabilityEnergy.ENERGY) {
+		if (capability == CapabilityEnergy.ENERGY || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return true;
 		}
 		return super.hasCapability(capability, facing);
@@ -213,6 +212,8 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if (capability == CapabilityEnergy.ENERGY) {
 			return CapabilityEnergy.ENERGY.cast(energyStorage);
+		} else if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
 		}
 		return super.getCapability(capability, facing);
 	}
