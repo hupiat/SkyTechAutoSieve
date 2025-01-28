@@ -110,6 +110,12 @@ sourceSets {
     }
 }
 
+tasks.processResources {
+    from('run/config') {
+        into 'config'
+    }
+}
+
 repositories {
     maven {
         name 'CleanroomMC Maven'
