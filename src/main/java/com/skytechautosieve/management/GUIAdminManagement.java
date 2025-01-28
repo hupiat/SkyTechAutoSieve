@@ -209,10 +209,11 @@ public class GUIAdminManagement extends GuiScreen {
 				newSelectedBlockIndex = scrollOffset + i;
 				if (newSelectedBlockIndex == selectedBlockIndex) {
 					selectedBlockIndex = -1;
-					this.buttonList.clear();
 				} else {
 					selectedBlockIndex = newSelectedBlockIndex;
 				}
+				selectedDropIndex = -1;
+				this.buttonList.clear();
 
 			}
 
