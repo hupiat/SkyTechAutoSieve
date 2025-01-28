@@ -103,7 +103,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 					for (int i = UPGRADE_SLOT_START; i <= UPGRADE_SLOT_END; i++) {
 						if (!inventory.getStackInSlot(i - 1).isEmpty()) {
 							int count = inventory.getStackInSlot(i - 1).getCount();
-							ItemStack upgrade = inventory.extractItem(i - 1, 1, false);
+							ItemStack upgrade = inventory.getStackInSlot(i - 1);
 							if (upgrade.getItem() == BlocksSubscriberHandler.FORTUNE_UPGRADE) {
 								this.fortuneUpgrades = count > MAX_FORTUNE_UPGRADES ? MAX_FORTUNE_UPGRADES : count;
 							}
