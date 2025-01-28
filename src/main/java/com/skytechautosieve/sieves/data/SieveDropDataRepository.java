@@ -37,7 +37,7 @@ public class SieveDropDataRepository extends WorldSavedData {
 	public void setDropData(Block block, Set<SieveDropData> drops, World world, boolean writeInConfig) {
 		sieveData.put(block, drops);
 		if (writeInConfig) {
-			InternalTools.eraseConfig(block.getLocalizedName().toString());
+			InternalTools.eraseConfig(block.getRegistryName().toString());
 			StringBuilder dropsBuilder = new StringBuilder();
 			for (SieveDropData dropData : drops) {
 				if (dropsBuilder.length() != 0) {
@@ -45,7 +45,7 @@ public class SieveDropDataRepository extends WorldSavedData {
 				}
 				dropsBuilder.append(dropData.getItem().getItem().getRegistryName() + "," + dropData.getDropRate());
 			}
-			InternalTools.writeConfig(block.getLocalizedName().toString(), dropsBuilder.toString());
+			InternalTools.writeConfig(block.getRegistryName().toString(), dropsBuilder.toString());
 		}
 		world.getMapStorage().setData(DATA_NAME, this);
 		world.getMapStorage().saveAllData();
@@ -71,7 +71,6 @@ public class SieveDropDataRepository extends WorldSavedData {
 			}
 		}
 		sieveData.clear();
-		System.out.println(syncMap);
 		for (Entry<Block, Set<SieveDropData>> entry : syncMap.entrySet()) {
 			get(world).setDropData(entry.getKey(), entry.getValue(), world, false);
 		}
