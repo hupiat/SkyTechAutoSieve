@@ -70,11 +70,10 @@ public class SieveDropDataRepository extends WorldSavedData {
 						Float.parseFloat(value.split(",")[1])));
 			}
 		}
+		sieveData.clear();
+		System.out.println(syncMap);
 		for (Entry<Block, Set<SieveDropData>> entry : syncMap.entrySet()) {
-			if (!sieveData.containsKey(entry.getKey())
-					|| !(new HashSet<>(entry.getValue())).equals(new HashSet<>(sieveData.get(entry.getKey())))) {
-				get(world).setDropData(entry.getKey(), entry.getValue(), world, false);
-			}
+			get(world).setDropData(entry.getKey(), entry.getValue(), world, false);
 		}
 	}
 

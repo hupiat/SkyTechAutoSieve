@@ -1,5 +1,6 @@
 package com.skytechautosieve.utils;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,8 +8,6 @@ import java.io.OutputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.skytechautosieve.Program;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,7 +42,7 @@ public abstract class InternalTools {
 		return false;
 	}
 
-	private static final String CONFIG_FILE = "skytechautosieve_config.properties";
+	private static final String CONFIG_FILE = "config/skytechautosieve_config.properties";
 
 	public static Properties readConfig() {
 		return loadConfig();
@@ -77,7 +76,7 @@ public abstract class InternalTools {
 
 	private static Properties loadConfig() {
 		Properties config = new Properties();
-		try (InputStream is = Program.class.getClassLoader().getResourceAsStream(CONFIG_FILE)) {
+		try (InputStream is = new FileInputStream(CONFIG_FILE)) {
 			config.load(is);
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, "Error while loading config file");

@@ -49,7 +49,8 @@ public class SieveDropData {
 		if (getClass() != obj.getClass())
 			return false;
 		SieveDropData other = (SieveDropData) obj;
-		return ItemStack.areItemsEqual(item, other.item);
+		return Float.floatToIntBits(dropRate) == Float.floatToIntBits(other.dropRate)
+				&& ItemStack.areItemsEqual(item, other.item);
 	}
 
 }
