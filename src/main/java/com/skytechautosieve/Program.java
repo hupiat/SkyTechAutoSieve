@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = "skytechautosieve", name = "SkyTechAutoSieve", version = "1.0.1")
+@Mod(modid = "skytechautosieve", name = "SkyTechAutoSieve", version = "1.0.3")
 public class Program {
 
 	public static Program instance = null;
@@ -47,6 +47,5 @@ public class Program {
 				1, Side.CLIENT);
 		NETWORK_CLIENT_CHANNEL_ENERGY.registerMessage(PacketSyncEnergy.Handler.class, PacketSyncEnergy.class, 2,
 				Side.CLIENT);
-
 	}
 }

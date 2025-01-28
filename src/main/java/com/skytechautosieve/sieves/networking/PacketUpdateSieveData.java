@@ -1,6 +1,6 @@
 package com.skytechautosieve.sieves.networking;
 
-import java.util.List;
+import java.util.Set;
 
 import com.skytechautosieve.Program;
 import com.skytechautosieve.sieves.data.SieveDropData;
@@ -73,7 +73,7 @@ public class PacketUpdateSieveData implements IMessage {
 				Block block = Block.getBlockFromName(message.blockName);
 				if (block != null) {
 					SieveDropDataRepository repo = SieveDropDataRepository.get(world);
-					List<SieveDropData> drops = repo.getDropData(block);
+					Set<SieveDropData> drops = repo.getDropData(block);
 					ItemStack item = new ItemStack(Item.getByNameOrId(message.itemName));
 					if (message.isAdding) {
 						drops.add(new SieveDropData(item, message.dropRate));
@@ -81,7 +81,7 @@ public class PacketUpdateSieveData implements IMessage {
 						drops.stream().filter(data -> ItemStack.areItemsEqual(item, data.getItem())).findAny()
 								.ifPresent(drops::remove);
 					}
-					repo.setDropData(block, drops, world);
+					repo.setDropData(block, drops, world, true);
 					Program.NETWORK_CLIENT_CHANNEL_SIEVE_DATA.sendTo(
 							new PacketSyncSieveData(repo.writeToNBT(new NBTTagCompound())),
 							ctx.getServerHandler().player);

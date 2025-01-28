@@ -1,12 +1,13 @@
 package com.skytechautosieve.utils;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.skytechautosieve.Program;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,12 +42,44 @@ public abstract class InternalTools {
 		return false;
 	}
 
+	private static final String CONFIG_FILE = "config/skytechautosieve_config.properties";
+
 	public static Properties readConfig() {
+		return loadConfig();
+	}
+
+	public static void eraseConfig(String key) {
+		Properties config = loadConfig();
+
+		if (config.containsKey(key)) {
+			config.remove(key);
+		}
+
+		try (OutputStream os = new FileOutputStream(CONFIG_FILE, false)) {
+			config.store(os, "Config file updated");
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, "Error while erasing config", e);
+		}
+	}
+
+	public static void writeConfig(String key, String value) {
+		Properties config = loadConfig();
+
+		config.setProperty(key, value);
+
+		try (OutputStream os = new FileOutputStream(CONFIG_FILE, false)) {
+			config.store(os, "Config file updated");
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, "Error while writing config", e);
+		}
+	}
+
+	private static Properties loadConfig() {
 		Properties config = new Properties();
-		try (InputStream is = Program.class.getClassLoader().getResourceAsStream("config.properties")) {
+		try (InputStream is = new FileInputStream(CONFIG_FILE)) {
 			config.load(is);
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Error while reading config file");
+			LOGGER.log(Level.SEVERE, "Error while loading config file");
 		}
 		return config;
 	}

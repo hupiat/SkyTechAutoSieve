@@ -96,6 +96,7 @@ public class PacketSyncSieveData implements IMessage {
 				if (world != null) {
 					SieveDropDataRepository repository = SieveDropDataRepository.get(world);
 					if (repository != null) {
+						repository.syncDropData(world);
 						repository.readFromNBT(message.getData());
 					}
 				}

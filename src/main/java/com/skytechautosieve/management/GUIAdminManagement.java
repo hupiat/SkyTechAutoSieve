@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.skytechautosieve.Program;
@@ -163,7 +164,7 @@ public class GUIAdminManagement extends GuiScreen {
 	protected void actionPerformed(GuiButton button) {
 		if (button.equals(addOrRemoveButton)) {
 			Block block = availableBlocks.get(selectedBlockIndex);
-			List<SieveDropData> dropData = repository.getDropData(block);
+			Set<SieveDropData> dropData = repository.getDropData(block);
 			ItemStack item = availableDrops.get(selectedDropIndex);
 			boolean existing = dropData.stream().anyMatch(data -> ItemStack.areItemsEqual(data.getItem(), item));
 			Program.NETWORK_SERVER_CHANNEL_SIEVE_DATA
@@ -223,8 +224,10 @@ public class GUIAdminManagement extends GuiScreen {
 					this.buttonList.clear();
 				} else {
 					selectedDropIndex = newSelectedDropIndex;
-					this.buttonList.add(addOrRemoveButton);
-					this.buttonList.add(rateSlider);
+					if (this.buttonList.isEmpty()) {
+						this.buttonList.add(addOrRemoveButton);
+						this.buttonList.add(rateSlider);
+					}
 					Optional<SieveDropData> existing = repository.getDropData(availableBlocks.get(selectedBlockIndex))
 							.stream().filter(data -> ItemStack.areItemsEqual(availableDrops.get(selectedDropIndex),
 									data.getItem()))

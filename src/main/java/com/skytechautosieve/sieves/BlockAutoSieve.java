@@ -125,7 +125,6 @@ public class BlockAutoSieve extends Block {
 			if (poweredByRedstone && !receivedEnergy && currentEnergy < maxEnergy) {
 				sieve.setField(1, maxEnergy);
 				receivedEnergy = true;
-				System.out.println("Fully charged by redstone signal.");
 			}
 
 			if (receivedEnergy && sieve.getEnergyStored() != currentEnergy) {
