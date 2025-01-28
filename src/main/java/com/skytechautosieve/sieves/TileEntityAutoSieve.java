@@ -52,6 +52,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	@Override
 	public void onLoad() {
 		repository = SieveDropDataRepository.get(world);
+		repository.syncDropData(world);
 		super.onLoad();
 	}
 
