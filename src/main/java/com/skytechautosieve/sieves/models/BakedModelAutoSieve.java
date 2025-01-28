@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 
 public class BakedModelAutoSieve implements IBakedModel {
+
 	@Override
 	public boolean isBuiltInRenderer() {
 		return true;
@@ -17,22 +18,22 @@ public class BakedModelAutoSieve implements IBakedModel {
 
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-		return null;
+		return java.util.Collections.emptyList();
 	}
 
 	@Override
 	public boolean isAmbientOcclusion() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isGui3d() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		return null;
+		return net.minecraft.client.Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
 	}
 
 	@Override
