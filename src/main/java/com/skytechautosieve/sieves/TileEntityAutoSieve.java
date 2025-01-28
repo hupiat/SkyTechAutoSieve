@@ -81,21 +81,6 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 			if (world.getTotalWorldTime() % 20 == 0) { // Every second
 				PacketSyncEnergy packet = new PacketSyncEnergy(pos, energyStorage.getEnergyStored());
 				Program.NETWORK_CLIENT_CHANNEL_ENERGY.sendToAll(packet);
-			}
-			if (world.getTotalWorldTime() % 60 == 0) { // Every 3 seconds
-				// Ensure a smoother effect for charging bar than a shorter delay
-				BlockAutoSieve.chargeEnergyThenSendToClient(world, pos);
-
-				// Performing a left shifting to process all items
-				for (int i = INPUT_SLOT; i < OUTPUT_START - 1; i++) {
-					if (inventory.getStackInSlot(i).isEmpty()) {
-						ItemStack nextStack = inventory.getStackInSlot(i + 1);
-						if (!nextStack.isEmpty()) {
-							inventory.setStackInSlot(i, nextStack);
-							inventory.setStackInSlot(i + 1, ItemStack.EMPTY);
-						}
-					}
-				}
 
 				// Processing upgrades slots
 				this.fortuneUpgrades = -1;
@@ -111,6 +96,22 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 							if (upgrade.getItem() == BlocksSubscriberHandler.SPEED_UPGRADE) {
 								this.speedUpgrades = count;
 							}
+						}
+					}
+				}
+
+			}
+			if (world.getTotalWorldTime() % 60 == 0) { // Every 3 seconds
+				// Ensure a smoother effect for charging bar than a shorter delay
+				BlockAutoSieve.chargeEnergyThenSendToClient(world, pos);
+
+				// Performing a left shifting to process all items
+				for (int i = INPUT_SLOT; i < OUTPUT_START - 1; i++) {
+					if (inventory.getStackInSlot(i).isEmpty()) {
+						ItemStack nextStack = inventory.getStackInSlot(i + 1);
+						if (!nextStack.isEmpty()) {
+							inventory.setStackInSlot(i, nextStack);
+							inventory.setStackInSlot(i + 1, ItemStack.EMPTY);
 						}
 					}
 				}
