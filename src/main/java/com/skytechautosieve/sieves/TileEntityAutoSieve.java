@@ -9,6 +9,7 @@ import com.skytechautosieve.Program;
 import com.skytechautosieve.sieves.data.SieveDropData;
 import com.skytechautosieve.sieves.data.SieveDropDataRepository;
 import com.skytechautosieve.sieves.networking.PacketSyncEnergy;
+import com.skytechautosieve.utils.InternalTools;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,7 +41,8 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 
 	private static final int ENERGY_PER_TICK = 100;
 	private int processTime = 0;
-	private static final int PROCESS_TIME_REQUIRED = 100;
+	private static final int PROCESS_TIME_REQUIRED = Integer
+			.parseInt((String) InternalTools.readConfig().get("process_time_seconds")) * 20;
 
 	private SieveDropDataRepository repository = null;
 
