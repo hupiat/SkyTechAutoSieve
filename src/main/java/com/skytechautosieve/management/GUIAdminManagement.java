@@ -175,15 +175,20 @@ public class GUIAdminManagement extends GuiScreen {
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		this.searchBlocksField.textboxKeyTyped(typedChar, keyCode);
-		this.searchDropsField.textboxKeyTyped(typedChar, keyCode);
-		if (!StringUtils.isNullOrEmpty(searchDropsField.getText())) {
-			selectedDropIndex = -1;
-			this.buttonList.clear();
-		}
-		if (!StringUtils.isNullOrEmpty(searchBlocksField.getText())) {
-			selectedBlockIndex = -1;
-			this.buttonList.clear();
+		if (this.searchBlocksField.isFocused()) {
+			this.searchBlocksField.textboxKeyTyped(typedChar, keyCode);
+
+			if (!StringUtils.isNullOrEmpty(searchBlocksField.getText())) {
+				selectedBlockIndex = -1;
+				this.buttonList.clear();
+			}
+		} else if (this.searchDropsField.isFocused()) {
+			this.searchDropsField.textboxKeyTyped(typedChar, keyCode);
+
+			if (!StringUtils.isNullOrEmpty(searchDropsField.getText())) {
+				selectedDropIndex = -1;
+				this.buttonList.clear();
+			}
 		}
 		super.keyTyped(typedChar, keyCode);
 	}
