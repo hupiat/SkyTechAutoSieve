@@ -8,8 +8,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -17,11 +15,6 @@ import net.minecraftforge.fml.relauncher.Side;
 public class Program {
 
 	public static Program instance = null;
-
-	public static final SimpleNetworkWrapper NETWORK_SERVER_CHANNEL_SIEVE_DATA = NetworkRegistry.INSTANCE
-			.newSimpleChannel("skytechautosieve:server:sieve_data");
-	public static final SimpleNetworkWrapper NETWORK_SERVER_CHANNEL_ENERGY = NetworkRegistry.INSTANCE
-			.newSimpleChannel("skytechautosieve:server:energy");
 
 	public Program() {
 		super();
@@ -35,10 +28,10 @@ public class Program {
 
 		GameRegistry.registerTileEntity(TileEntityAutoSieve.class, new ResourceLocation("skytechautosieve:autosieve"));
 
-		NETWORK_SERVER_CHANNEL_SIEVE_DATA.registerMessage(PacketUpdateSieveData.Handler.class,
+		NetworkHandler.NETWORK_SERVER_CHANNEL_SIEVE_DATA.registerMessage(PacketUpdateSieveData.Handler.class,
 				PacketUpdateSieveData.class, 0, Side.SERVER);
-		NETWORK_SERVER_CHANNEL_ENERGY.registerMessage(PacketSyncEnergy.Handler.class, PacketSyncEnergy.class, 1,
-				Side.SERVER);
+		NetworkHandler.NETWORK_SERVER_CHANNEL_ENERGY.registerMessage(PacketSyncEnergy.Handler.class,
+				PacketSyncEnergy.class, 1, Side.SERVER);
 
 	}
 }

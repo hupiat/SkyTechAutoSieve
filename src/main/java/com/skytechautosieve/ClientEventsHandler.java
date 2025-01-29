@@ -22,17 +22,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = "skytechautosieve", value = Side.CLIENT)
 public class ClientEventsHandler {
-	public static final SimpleNetworkWrapper NETWORK_CLIENT_CHANNEL_SIEVE_DATA = NetworkRegistry.INSTANCE
-			.newSimpleChannel("skytechautosieve:client:sieve_data");
-	public static final SimpleNetworkWrapper NETWORK_CLIENT_CHANNEL_ENERGY = NetworkRegistry.INSTANCE
-			.newSimpleChannel("skytechautosieve:client:energy");
 	private static final KeyBinding OPEN_SIEVE_GUI = new KeyBinding("key.open_sieve_gui", Keyboard.KEY_A,
 			"key.categories.sieve");
 
@@ -63,10 +58,10 @@ public class ClientEventsHandler {
 	public static void registerModels(ModelRegistryEvent event) {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoSieve.class, new RenderBlockAutoSieve());
 
-		NETWORK_CLIENT_CHANNEL_SIEVE_DATA.registerMessage(PacketSyncSieveData.Handler.class, PacketSyncSieveData.class,
-				0, Side.CLIENT);
-		NETWORK_CLIENT_CHANNEL_ENERGY.registerMessage(PacketSyncEnergy.Handler.class, PacketSyncEnergy.class, 1,
-				Side.CLIENT);
+		NetworkHandler.NETWORK_CLIENT_CHANNEL_SIEVE_DATA.registerMessage(PacketSyncSieveData.Handler.class,
+				PacketSyncSieveData.class, 0, Side.CLIENT);
+		NetworkHandler.NETWORK_CLIENT_CHANNEL_ENERGY.registerMessage(PacketSyncEnergy.Handler.class,
+				PacketSyncEnergy.class, 1, Side.CLIENT);
 
 		ModelLoader.setCustomModelResourceLocation(BlocksSubscriberHandler.AUTO_SIEVE_ITEM, 0,
 				new ModelResourceLocation("skytechautosieve:auto_sieve", "inventory"));

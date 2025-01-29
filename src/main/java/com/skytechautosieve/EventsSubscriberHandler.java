@@ -25,7 +25,7 @@ public class EventsSubscriberHandler {
 		if (!event.player.world.isRemote) {
 			SieveDropDataRepository repo = SieveDropDataRepository.get(event.player.world);
 			if (repo != null) {
-				ClientEventsHandler.NETWORK_CLIENT_CHANNEL_SIEVE_DATA.sendTo(
+				NetworkHandler.NETWORK_CLIENT_CHANNEL_SIEVE_DATA.sendTo(
 						new PacketSyncSieveData(repo.writeToNBT(new NBTTagCompound())), (EntityPlayerMP) event.player);
 			}
 		}

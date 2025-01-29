@@ -1,6 +1,6 @@
 package com.skytechautosieve.sieves;
 
-import com.skytechautosieve.ClientEventsHandler;
+import com.skytechautosieve.NetworkHandler;
 import com.skytechautosieve.Program;
 import com.skytechautosieve.sieves.networking.PacketSyncEnergy;
 
@@ -129,7 +129,7 @@ public class BlockAutoSieve extends Block {
 			}
 
 			if (receivedEnergy && sieve.getEnergyStored() != currentEnergy) {
-				ClientEventsHandler.NETWORK_CLIENT_CHANNEL_ENERGY
+				NetworkHandler.NETWORK_CLIENT_CHANNEL_ENERGY
 						.sendToAll(new PacketSyncEnergy(pos, sieve.getEnergyStored()));
 			}
 		}

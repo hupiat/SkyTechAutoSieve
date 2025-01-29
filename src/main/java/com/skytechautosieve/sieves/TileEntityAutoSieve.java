@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.skytechautosieve.BlocksSubscriberHandler;
-import com.skytechautosieve.ClientEventsHandler;
+import com.skytechautosieve.NetworkHandler;
 import com.skytechautosieve.sieves.data.SieveDropData;
 import com.skytechautosieve.sieves.data.SieveDropDataRepository;
 import com.skytechautosieve.sieves.networking.PacketSyncEnergy;
@@ -80,7 +80,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 			}
 			if (world.getTotalWorldTime() % 20 == 0) { // Every second
 				PacketSyncEnergy packet = new PacketSyncEnergy(pos, energyStorage.getEnergyStored());
-				ClientEventsHandler.NETWORK_CLIENT_CHANNEL_ENERGY.sendToAll(packet);
+				NetworkHandler.NETWORK_CLIENT_CHANNEL_ENERGY.sendToAll(packet);
 
 				// Processing upgrades slots
 				this.fortuneUpgrades = -1;
