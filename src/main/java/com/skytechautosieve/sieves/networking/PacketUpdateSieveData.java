@@ -82,8 +82,7 @@ public class PacketUpdateSieveData implements IMessage {
 								.ifPresent(drops::remove);
 					}
 					repo.setDropData(block, drops, world, true);
-					NetworkHandler.NETWORK_CLIENT_CHANNEL_SIEVE_DATA.sendTo(
-							new PacketSyncSieveData(repo.writeToNBT(new NBTTagCompound())),
+					NetworkHandler.NETWORK.sendTo(new PacketSyncSieveData(repo.writeToNBT(new NBTTagCompound())),
 							ctx.getServerHandler().player);
 
 				}

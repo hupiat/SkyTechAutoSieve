@@ -80,7 +80,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 			}
 			if (world.getTotalWorldTime() % 20 == 0) { // Every second
 				PacketSyncEnergy packet = new PacketSyncEnergy(pos, energyStorage.getEnergyStored());
-				NetworkHandler.NETWORK_CLIENT_CHANNEL_ENERGY.sendToAll(packet);
+				NetworkHandler.NETWORK.sendToAll(packet);
 
 				// Processing upgrades slots
 				this.fortuneUpgrades = -1;

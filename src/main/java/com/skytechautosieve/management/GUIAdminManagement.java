@@ -167,9 +167,8 @@ public class GUIAdminManagement extends GuiScreen {
 			Set<SieveDropData> dropData = repository.getDropData(block);
 			ItemStack item = availableDrops.get(selectedDropIndex);
 			boolean existing = dropData.stream().anyMatch(data -> ItemStack.areItemsEqual(data.getItem(), item));
-			NetworkHandler.NETWORK_SERVER_CHANNEL_SIEVE_DATA
-					.sendToServer(new PacketUpdateSieveData(block.getRegistryName().toString(),
-							item.getItem().getRegistryName().toString(), !existing, dropRate));
+			NetworkHandler.NETWORK.sendToServer(new PacketUpdateSieveData(block.getRegistryName().toString(),
+					item.getItem().getRegistryName().toString(), !existing, dropRate));
 		}
 	}
 

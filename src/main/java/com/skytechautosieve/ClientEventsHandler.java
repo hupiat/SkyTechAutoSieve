@@ -6,8 +6,6 @@ import com.skytechautosieve.hud.GUIAdminManagementHUD;
 import com.skytechautosieve.sieves.AutoSieveGuiHandler;
 import com.skytechautosieve.sieves.TileEntityAutoSieve;
 import com.skytechautosieve.sieves.models.BakedModelAutoSieve;
-import com.skytechautosieve.sieves.networking.PacketSyncEnergy;
-import com.skytechautosieve.sieves.networking.PacketSyncSieveData;
 import com.skytechautosieve.sieves.renders.RenderBlockAutoSieve;
 import com.skytechautosieve.sieves.renders.RenderItemAutoSieve;
 
@@ -57,11 +55,6 @@ public class ClientEventsHandler {
 	@SubscribeEvent
 	public static void registerModels(ModelRegistryEvent event) {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoSieve.class, new RenderBlockAutoSieve());
-
-		NetworkHandler.NETWORK_CLIENT_CHANNEL_SIEVE_DATA.registerMessage(PacketSyncSieveData.Handler.class,
-				PacketSyncSieveData.class, 0, Side.CLIENT);
-		NetworkHandler.NETWORK_CLIENT_CHANNEL_ENERGY.registerMessage(PacketSyncEnergy.Handler.class,
-				PacketSyncEnergy.class, 1, Side.CLIENT);
 
 		ModelLoader.setCustomModelResourceLocation(BlocksSubscriberHandler.AUTO_SIEVE_ITEM, 0,
 				new ModelResourceLocation("skytechautosieve:auto_sieve", "inventory"));

@@ -129,8 +129,7 @@ public class BlockAutoSieve extends Block {
 			}
 
 			if (receivedEnergy && sieve.getEnergyStored() != currentEnergy) {
-				NetworkHandler.NETWORK_CLIENT_CHANNEL_ENERGY
-						.sendToAll(new PacketSyncEnergy(pos, sieve.getEnergyStored()));
+				NetworkHandler.NETWORK.sendToAll(new PacketSyncEnergy(pos, sieve.getEnergyStored()));
 			}
 		}
 	}
