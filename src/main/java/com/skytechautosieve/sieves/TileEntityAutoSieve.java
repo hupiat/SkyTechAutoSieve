@@ -214,7 +214,11 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 		if (capability == CapabilityEnergy.ENERGY) {
 			return CapabilityEnergy.ENERGY.cast(energyStorage);
 		} else if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+			ItemStackHandler out = new ItemStackHandler(UPGRADE_SLOT_START - 1);
+			for (int i = 0; i < UPGRADE_SLOT_START - 1; i++) {
+				out.setStackInSlot(i, inventory.getStackInSlot(i));
+			}
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(out);
 		}
 		return super.getCapability(capability, facing);
 	}
