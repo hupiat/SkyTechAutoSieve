@@ -6,16 +6,13 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.skytechautosieve.sieves.data.SieveDropDataRepository;
-
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class PacketSyncSieveData implements IMessage {
 
@@ -91,15 +88,9 @@ public class PacketSyncSieveData implements IMessage {
 	public static class Handler implements IMessageHandler<PacketSyncSieveData, IMessage> {
 		@Override
 		public IMessage onMessage(PacketSyncSieveData message, MessageContext ctx) {
-			Minecraft.getMinecraft().addScheduledTask(() -> {
-				World world = Minecraft.getMinecraft().world;
-				if (world != null) {
-					SieveDropDataRepository repository = SieveDropDataRepository.get(world);
-					if (repository != null) {
-						repository.readFromNBT(message.getData());
-					}
-				}
-			});
+			if (ctx.side == Side.CLIENT) {
+				PacketSyncHandlers.handleSyncSieveData(message);
+			}
 			return null;
 		}
 	}

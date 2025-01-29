@@ -1,13 +1,11 @@
 package com.skytechautosieve.sieves.networking;
 
-import com.skytechautosieve.sieves.TileEntityAutoSieve;
-
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class PacketSyncEnergy implements IMessage {
 
@@ -47,15 +45,9 @@ public class PacketSyncEnergy implements IMessage {
 	public static class Handler implements IMessageHandler<PacketSyncEnergy, IMessage> {
 		@Override
 		public IMessage onMessage(PacketSyncEnergy message, MessageContext ctx) {
-			Minecraft.getMinecraft().addScheduledTask(() -> {
-				if (Minecraft.getMinecraft().world != null) {
-					TileEntityAutoSieve tile = (TileEntityAutoSieve) Minecraft.getMinecraft().world
-							.getTileEntity(message.pos);
-					if (tile != null) {
-						tile.setField(1, message.energyStored);
-					}
-				}
-			});
+			if (ctx.side == Side.CLIENT) {
+				PacketSyncHandlers.handleSyncEnergy(message);
+			}
 			return null;
 		}
 	}
