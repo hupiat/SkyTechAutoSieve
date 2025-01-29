@@ -2,7 +2,7 @@ package com.skytechautosieve.sieves.networking;
 
 import java.util.Set;
 
-import com.skytechautosieve.Program;
+import com.skytechautosieve.ClientEventsHandler;
 import com.skytechautosieve.sieves.data.SieveDropData;
 import com.skytechautosieve.sieves.data.SieveDropDataRepository;
 
@@ -82,7 +82,7 @@ public class PacketUpdateSieveData implements IMessage {
 								.ifPresent(drops::remove);
 					}
 					repo.setDropData(block, drops, world, true);
-					Program.NETWORK_CLIENT_CHANNEL_SIEVE_DATA.sendTo(
+					ClientEventsHandler.NETWORK_CLIENT_CHANNEL_SIEVE_DATA.sendTo(
 							new PacketSyncSieveData(repo.writeToNBT(new NBTTagCompound())),
 							ctx.getServerHandler().player);
 

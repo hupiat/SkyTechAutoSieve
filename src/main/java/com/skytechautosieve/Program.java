@@ -1,9 +1,7 @@
 package com.skytechautosieve;
 
-import com.skytechautosieve.sieves.AutoSieveGuiHandler;
 import com.skytechautosieve.sieves.TileEntityAutoSieve;
 import com.skytechautosieve.sieves.networking.PacketSyncEnergy;
-import com.skytechautosieve.sieves.networking.PacketSyncSieveData;
 import com.skytechautosieve.sieves.networking.PacketUpdateSieveData;
 
 import net.minecraft.util.ResourceLocation;
@@ -22,10 +20,8 @@ public class Program {
 
 	public static final SimpleNetworkWrapper NETWORK_SERVER_CHANNEL_SIEVE_DATA = NetworkRegistry.INSTANCE
 			.newSimpleChannel("skytechautosieve:server:sieve_data");
-	public static final SimpleNetworkWrapper NETWORK_CLIENT_CHANNEL_SIEVE_DATA = NetworkRegistry.INSTANCE
-			.newSimpleChannel("skytechautosieve:client:sieve_data");
-	public static final SimpleNetworkWrapper NETWORK_CLIENT_CHANNEL_ENERGY = NetworkRegistry.INSTANCE
-			.newSimpleChannel("skytechautosieve:client:energy");
+	public static final SimpleNetworkWrapper NETWORK_SERVER_CHANNEL_ENERGY = NetworkRegistry.INSTANCE
+			.newSimpleChannel("skytechautosieve:server:energy");
 
 	public Program() {
 		super();
@@ -39,13 +35,10 @@ public class Program {
 
 		GameRegistry.registerTileEntity(TileEntityAutoSieve.class, new ResourceLocation("skytechautosieve:autosieve"));
 
-		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new AutoSieveGuiHandler());
-
 		NETWORK_SERVER_CHANNEL_SIEVE_DATA.registerMessage(PacketUpdateSieveData.Handler.class,
 				PacketUpdateSieveData.class, 0, Side.SERVER);
-		NETWORK_CLIENT_CHANNEL_SIEVE_DATA.registerMessage(PacketSyncSieveData.Handler.class, PacketSyncSieveData.class,
-				1, Side.CLIENT);
-		NETWORK_CLIENT_CHANNEL_ENERGY.registerMessage(PacketSyncEnergy.Handler.class, PacketSyncEnergy.class, 2,
-				Side.CLIENT);
+		NETWORK_SERVER_CHANNEL_ENERGY.registerMessage(PacketSyncEnergy.Handler.class, PacketSyncEnergy.class, 1,
+				Side.SERVER);
+
 	}
 }
