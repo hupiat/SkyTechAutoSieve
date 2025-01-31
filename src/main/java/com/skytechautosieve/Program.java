@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-@Mod(modid = "skytechautosieve", name = "SkyTechAutoSieve", version = "1.0.4")
+@Mod(modid = "skytechautosieve", name = "SkyTechAutoSieve", version = "1.0.5")
 public class Program {
 
 	public static Program instance = null;

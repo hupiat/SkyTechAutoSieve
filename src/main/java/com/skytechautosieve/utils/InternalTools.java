@@ -1,5 +1,6 @@
 package com.skytechautosieve.utils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -74,13 +75,27 @@ public abstract class InternalTools {
 		}
 	}
 
-	private static Properties loadConfig() {
+	public static Properties loadConfig() {
 		Properties config = new Properties();
-		try (InputStream is = new FileInputStream(CONFIG_FILE)) {
-			config.load(is);
+		File file = new File(CONFIG_FILE);
+
+		try {
+			if (!file.exists()) {
+				LOGGER.info("Config file not found, creating a new one...");
+				if (!file.createNewFile()) {
+					LOGGER.severe("Error while creating config file");
+				}
+			}
+
+			try (InputStream is = new FileInputStream(file)) {
+				config.load(is);
+				LOGGER.info("Config file loaded successfully.");
+			}
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Error while loading config file");
+			LOGGER.log(Level.SEVERE, "Error while loading config file", e);
 		}
+
 		return config;
 	}
+
 }

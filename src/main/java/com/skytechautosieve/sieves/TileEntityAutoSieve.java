@@ -66,53 +66,50 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	@Override
 	public void update() {
 		boolean canSift = canSift() && energyStorage.getEnergyStored() >= ENERGY_PER_TICK;
-		if (!world.isRemote) {
-			if (canSift) {
-				processTime++;
-				energyStorage.extractEnergy(ENERGY_PER_TICK, false);
-				if (processTime >= (speedUpgrades > 0 ? PROCESS_TIME_REQUIRED / speedUpgrades
-						: PROCESS_TIME_REQUIRED)) {
-					processSieve();
-					processTime = 0;
-				}
-			} else {
+		if (canSift) {
+			processTime++;
+			energyStorage.extractEnergy(ENERGY_PER_TICK, false);
+			if (processTime >= (speedUpgrades > 0 ? PROCESS_TIME_REQUIRED / speedUpgrades : PROCESS_TIME_REQUIRED)) {
+				processSieve();
 				processTime = 0;
 			}
-			if (world.getTotalWorldTime() % 20 == 0) { // Every second
-				PacketSyncEnergy packet = new PacketSyncEnergy(pos, energyStorage.getEnergyStored());
-				NetworkHandler.NETWORK.sendToAll(packet);
+		} else {
+			processTime = 0;
+		}
+		if (world.getTotalWorldTime() % 20 == 0) { // Every second
+			PacketSyncEnergy packet = new PacketSyncEnergy(pos, energyStorage.getEnergyStored());
+			NetworkHandler.NETWORK.sendToAll(packet);
 
-				// Processing upgrades slots
-				this.fortuneUpgrades = -1;
-				this.speedUpgrades = -1;
-				if (canSift) {
-					for (int i = UPGRADE_SLOT_START; i <= UPGRADE_SLOT_END; i++) {
-						if (!inventory.getStackInSlot(i - 1).isEmpty()) {
-							int count = inventory.getStackInSlot(i - 1).getCount();
-							ItemStack upgrade = inventory.getStackInSlot(i - 1);
-							if (upgrade.getItem() == BlocksSubscriberHandler.FORTUNE_UPGRADE) {
-								this.fortuneUpgrades = count > MAX_FORTUNE_UPGRADES ? MAX_FORTUNE_UPGRADES : count;
-							}
-							if (upgrade.getItem() == BlocksSubscriberHandler.SPEED_UPGRADE) {
-								this.speedUpgrades = count;
-							}
+			// Processing upgrades slots
+			this.fortuneUpgrades = -1;
+			this.speedUpgrades = -1;
+			if (canSift) {
+				for (int i = UPGRADE_SLOT_START; i <= UPGRADE_SLOT_END; i++) {
+					if (!inventory.getStackInSlot(i - 1).isEmpty()) {
+						int count = inventory.getStackInSlot(i - 1).getCount();
+						ItemStack upgrade = inventory.getStackInSlot(i - 1);
+						if (upgrade.getItem() == BlocksSubscriberHandler.FORTUNE_UPGRADE) {
+							this.fortuneUpgrades = count > MAX_FORTUNE_UPGRADES ? MAX_FORTUNE_UPGRADES : count;
+						}
+						if (upgrade.getItem() == BlocksSubscriberHandler.SPEED_UPGRADE) {
+							this.speedUpgrades = count;
 						}
 					}
 				}
-
 			}
-			if (world.getTotalWorldTime() % 60 == 0) { // Every 3 seconds
-				// Ensure a smoother effect for charging bar than a shorter delay
-				BlockAutoSieve.chargeEnergyThenSendToClient(world, pos);
 
-				// Performing a left shifting to process all items
-				for (int i = INPUT_SLOT; i < OUTPUT_START - 1; i++) {
-					if (inventory.getStackInSlot(i).isEmpty()) {
-						ItemStack nextStack = inventory.getStackInSlot(i + 1);
-						if (!nextStack.isEmpty()) {
-							inventory.setStackInSlot(i, nextStack);
-							inventory.setStackInSlot(i + 1, ItemStack.EMPTY);
-						}
+		}
+		if (world.getTotalWorldTime() % 60 == 0) { // Every 3 seconds
+			// Ensure a smoother effect for charging bar than a shorter delay
+			BlockAutoSieve.chargeEnergyThenSendToClient(world, pos);
+
+			// Performing a left shifting to process all items
+			for (int i = INPUT_SLOT; i < OUTPUT_START - 1; i++) {
+				if (inventory.getStackInSlot(i).isEmpty()) {
+					ItemStack nextStack = inventory.getStackInSlot(i + 1);
+					if (!nextStack.isEmpty()) {
+						inventory.setStackInSlot(i, nextStack);
+						inventory.setStackInSlot(i + 1, ItemStack.EMPTY);
 					}
 				}
 			}

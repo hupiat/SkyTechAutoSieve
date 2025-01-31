@@ -22,12 +22,10 @@ public class EventsSubscriberHandler {
 
 	@SubscribeEvent
 	public void onClientConnectedToServer(PlayerEvent.PlayerLoggedInEvent event) {
-		if (!event.player.world.isRemote) {
-			SieveDropDataRepository repo = SieveDropDataRepository.get(event.player.world);
-			if (repo != null) {
-				NetworkHandler.NETWORK.sendTo(new PacketSyncSieveData(repo.writeToNBT(new NBTTagCompound())),
-						(EntityPlayerMP) event.player);
-			}
+		SieveDropDataRepository repo = SieveDropDataRepository.get(event.player.world);
+		if (repo != null) {
+			NetworkHandler.NETWORK.sendTo(new PacketSyncSieveData(repo.writeToNBT(new NBTTagCompound())),
+					(EntityPlayerMP) event.player);
 		}
 	}
 }
