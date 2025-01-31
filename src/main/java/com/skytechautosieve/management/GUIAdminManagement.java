@@ -145,17 +145,11 @@ public class GUIAdminManagement extends GuiScreen {
 	}
 
 	private boolean isMatchingSearchQuery(String name, GuiTextField searchField) {
-		if (!StringUtils.isNullOrEmpty(searchField.getText())) {
-			boolean matching = false;
-			for (String word : name.toLowerCase().split(" ")) {
-				if (word.startsWith(searchField.getText().toLowerCase())) {
-					matching = true;
-					break;
-				}
-			}
-			return matching;
+		String query = searchField.getText().trim().toLowerCase();
+		if (StringUtils.isNullOrEmpty(query)) {
+			return true;
 		}
-		return true;
+		return name.toLowerCase().contains(query);
 	}
 
 	// Callbacks

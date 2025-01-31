@@ -21,7 +21,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityAutoSieve extends TileEntity implements ITickable, IInventory {
@@ -208,37 +208,64 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 		if (capability == CapabilityEnergy.ENERGY) {
 			return CapabilityEnergy.ENERGY.cast(energyStorage);
 		} else if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new IItemHandlerModifiable() {
-				@Override
-				public void setStackInSlot(int slot, ItemStack stack) {
-					inventory.setStackInSlot(slot, stack);
-				}
+			if (facing == EnumFacing.UP) {
+				// Input : accept items but do not extract
+				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new IItemHandler() {
+					@Override
+					public int getSlots() {
+						return OUTPUT_START - INPUT_SLOT;
+					}
 
-				@Override
-				public int getSlots() {
-					return OUTPUT_END - OUTPUT_START;
-				}
+					@Override
+					public ItemStack getStackInSlot(int slot) {
+						return inventory.getStackInSlot(INPUT_SLOT + slot);
+					}
 
-				@Override
-				public ItemStack getStackInSlot(int slot) {
-					return inventory.getStackInSlot(OUTPUT_START + slot);
-				}
+					@Override
+					public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+						return inventory.insertItem(INPUT_SLOT + slot, stack, simulate);
+					}
 
-				@Override
-				public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-					return inventory.insertItem(OUTPUT_START + slot, stack, simulate);
-				}
+					@Override
+					public ItemStack extractItem(int slot, int amount, boolean simulate) {
+						return ItemStack.EMPTY;
+					}
 
-				@Override
-				public ItemStack extractItem(int slot, int amount, boolean simulate) {
-					return inventory.extractItem(OUTPUT_START + slot, amount, simulate);
-				}
+					@Override
+					public int getSlotLimit(int slot) {
+						return inventory.getSlotLimit(INPUT_SLOT + slot);
+					}
+				});
+			} else if (facing == EnumFacing.DOWN) {
+				// Output : extract only
+				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new IItemHandler() {
+					@Override
+					public int getSlots() {
+						return OUTPUT_END - OUTPUT_START;
+					}
 
-				@Override
-				public int getSlotLimit(int slot) {
-					return inventory.getSlotLimit(OUTPUT_START + slot);
-				}
-			});
+					@Override
+					public ItemStack getStackInSlot(int slot) {
+						return inventory.getStackInSlot(OUTPUT_START + slot);
+					}
+
+					@Override
+					public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+						return stack;
+					}
+
+					@Override
+					public ItemStack extractItem(int slot, int amount, boolean simulate) {
+						return inventory.extractItem(OUTPUT_START + slot, amount, simulate);
+					}
+
+					@Override
+					public int getSlotLimit(int slot) {
+						return inventory.getSlotLimit(OUTPUT_START + slot);
+					}
+				});
+			}
+
 		}
 		return super.getCapability(capability, facing);
 	}
