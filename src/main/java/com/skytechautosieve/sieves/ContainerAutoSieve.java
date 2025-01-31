@@ -44,7 +44,7 @@ public class ContainerAutoSieve extends Container {
 
 		// Add player inventory slots (3 rows, 9 columns)
 		startX = 8;
-		startY = 111;
+		startY = 112;
 
 		for (int row = 0; row < 3; row++) {
 			for (int col = 0; col < 9; col++) {
@@ -54,7 +54,7 @@ public class ContainerAutoSieve extends Container {
 		}
 
 		// Add player hotbar slots (1 row, 9 columns)
-		startY = 169;
+		startY = 170;
 		for (int col = 0; col < 9; col++) {
 			this.addSlotToContainer(new Slot(playerInv, col, startX + col * slotSize, startY));
 		}
@@ -67,34 +67,24 @@ public class ContainerAutoSieve extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-		ItemStack stack = ItemStack.EMPTY;
 		Slot slot = this.inventorySlots.get(index);
-
-		if (slot != null && slot.getHasStack()) {
-			ItemStack currentStack = slot.getStack();
-			stack = currentStack.copy();
-
-			int tileInventoryStart = 0;
-			int tileInventoryEnd = TileEntityAutoSieve.TOTAL_SLOTS;
-			int playerInventoryStart = tileInventoryEnd;
-			int playerInventoryEnd = tileInventoryEnd + 36;
-
-			if (index < tileInventoryEnd) {
-				if (!this.mergeItemStack(currentStack, playerInventoryStart, playerInventoryEnd, true)) {
-					return ItemStack.EMPTY;
-				}
-			} else {
-				if (!this.mergeItemStack(currentStack, tileInventoryStart, tileInventoryEnd, false)) {
-					return ItemStack.EMPTY;
-				}
-			}
-
-			if (currentStack.isEmpty()) {
-				slot.putStack(ItemStack.EMPTY);
-			} else {
-				slot.onSlotChanged();
-			}
+		if (slot == null || !slot.getHasStack()) {
+			return ItemStack.EMPTY;
 		}
-		return stack;
+
+		ItemStack stack = slot.getStack();
+		ItemStack copy = stack.copy();
+
+		if (!this.mergeItemStack(stack, 0, 41, true)) {
+			return ItemStack.EMPTY;
+		}
+
+		if (stack.isEmpty()) {
+			slot.putStack(ItemStack.EMPTY);
+		} else {
+			slot.onSlotChanged();
+		}
+
+		return copy;
 	}
 }

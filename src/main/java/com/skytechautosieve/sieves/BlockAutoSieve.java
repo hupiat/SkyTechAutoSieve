@@ -126,7 +126,7 @@ public class BlockAutoSieve extends Block {
 				receivedEnergy = true;
 			}
 
-			if (receivedEnergy && sieve.getEnergyStored() != currentEnergy) {
+			if (receivedEnergy && sieve.getEnergyStored() != currentEnergy && !world.isRemote) {
 				NetworkHandler.NETWORK.sendToAll(new PacketSyncEnergy(pos, sieve.getEnergyStored()));
 			}
 		}

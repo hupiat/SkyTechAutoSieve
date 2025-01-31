@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 import com.skytechautosieve.BlocksSubscriberHandler;
-import com.skytechautosieve.NetworkHandler;
 import com.skytechautosieve.sieves.data.SieveDropData;
 import com.skytechautosieve.sieves.data.SieveDropDataRepository;
-import com.skytechautosieve.sieves.networking.PacketSyncEnergy;
 import com.skytechautosieve.utils.InternalTools;
 
 import net.minecraft.block.Block;
@@ -77,8 +75,6 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 			processTime = 0;
 		}
 		if (world.getTotalWorldTime() % 20 == 0) { // Every second
-			PacketSyncEnergy packet = new PacketSyncEnergy(pos, energyStorage.getEnergyStored());
-			NetworkHandler.NETWORK.sendToAll(packet);
 
 			// Processing upgrades slots
 			this.fortuneUpgrades = -1;
@@ -212,7 +208,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 			return CapabilityEnergy.ENERGY.cast(energyStorage);
 		} else if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			ItemStackHandler out = new ItemStackHandler(UPGRADE_SLOT_START - 1);
-			for (int i = 0; i < UPGRADE_SLOT_START - 1; i++) {
+			for (int i = OUTPUT_START; i < OUTPUT_END; i++) {
 				out.setStackInSlot(i, inventory.getStackInSlot(i));
 			}
 			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(out);

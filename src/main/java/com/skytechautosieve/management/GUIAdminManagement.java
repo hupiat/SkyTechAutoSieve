@@ -163,9 +163,13 @@ public class GUIAdminManagement extends GuiScreen {
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		if (button.equals(addOrRemoveButton)) {
-			Block block = availableBlocks.get(selectedBlockIndex);
+			Block block = availableBlocks.stream()
+					.filter(blockData -> isMatchingSearchQuery(blockData.getLocalizedName(), searchBlocksField))
+					.collect(Collectors.toList()).get(selectedBlockIndex);
 			Set<SieveDropData> dropData = repository.getDropData(block);
-			ItemStack item = availableDrops.get(selectedDropIndex);
+			ItemStack item = availableDrops.stream()
+					.filter(drop -> isMatchingSearchQuery(drop.getDisplayName(), searchDropsField))
+					.collect(Collectors.toList()).get(selectedDropIndex);
 			boolean existing = dropData.stream().anyMatch(data -> ItemStack.areItemsEqual(data.getItem(), item));
 			NetworkHandler.NETWORK.sendToServer(new PacketUpdateSieveData(block.getRegistryName().toString(),
 					item.getItem().getRegistryName().toString(), !existing, dropRate));
