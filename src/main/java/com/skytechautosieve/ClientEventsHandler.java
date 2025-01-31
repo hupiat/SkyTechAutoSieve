@@ -3,7 +3,6 @@ package com.skytechautosieve;
 import org.lwjgl.input.Keyboard;
 
 import com.skytechautosieve.hud.GUIAdminManagementHUD;
-import com.skytechautosieve.sieves.AutoSieveGuiHandler;
 import com.skytechautosieve.sieves.TileEntityAutoSieve;
 import com.skytechautosieve.sieves.models.BakedModelAutoSieve;
 import com.skytechautosieve.sieves.renders.RenderBlockAutoSieve;
@@ -19,7 +18,6 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -32,7 +30,6 @@ public class ClientEventsHandler {
 	static {
 		BlocksSubscriberHandler.AUTO_SIEVE_ITEM.setTileEntityItemStackRenderer(new RenderItemAutoSieve());
 		ClientRegistry.registerKeyBinding(OPEN_SIEVE_GUI);
-		NetworkRegistry.INSTANCE.registerGuiHandler(Program.instance, new AutoSieveGuiHandler());
 	}
 
 	@SubscribeEvent
