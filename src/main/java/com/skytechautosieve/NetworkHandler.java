@@ -1,5 +1,6 @@
 package com.skytechautosieve;
 
+import com.skytechautosieve.sieves.networking.PacketOpenHUD;
 import com.skytechautosieve.sieves.networking.PacketSyncEnergy;
 import com.skytechautosieve.sieves.networking.PacketSyncSieveData;
 import com.skytechautosieve.sieves.networking.PacketUpdateSieveData;
@@ -15,6 +16,7 @@ public class NetworkHandler {
 	public static void registerMessages() {
 		NETWORK.registerMessage(PacketSyncSieveData.Handler.class, PacketSyncSieveData.class, packetId++, Side.CLIENT);
 		NETWORK.registerMessage(PacketSyncEnergy.Handler.class, PacketSyncEnergy.class, packetId++, Side.CLIENT);
+		NETWORK.registerMessage(PacketOpenHUD.Handler.class, PacketOpenHUD.class, packetId++, Side.CLIENT);
 		NETWORK.registerMessage(PacketUpdateSieveData.Handler.class, PacketUpdateSieveData.class, packetId++,
 				Side.SERVER);
 	}

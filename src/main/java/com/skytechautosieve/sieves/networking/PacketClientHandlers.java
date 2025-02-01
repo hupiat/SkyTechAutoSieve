@@ -1,5 +1,6 @@
 package com.skytechautosieve.sieves.networking;
 
+import com.skytechautosieve.hud.GUIAdminManagementHUD;
 import com.skytechautosieve.sieves.TileEntityAutoSieve;
 import com.skytechautosieve.sieves.data.SieveDropDataRepository;
 
@@ -8,7 +9,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class PacketSyncHandlers {
+public abstract class PacketClientHandlers {
 
 	@SideOnly(Side.CLIENT)
 	public static void handleSyncEnergy(PacketSyncEnergy message) {
@@ -32,6 +33,16 @@ public abstract class PacketSyncHandlers {
 				if (repository != null) {
 					repository.readFromNBT(message.getData());
 				}
+			}
+		});
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static void handleOpenHUD() {
+		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+			@Override
+			public void run() {
+				Minecraft.getMinecraft().displayGuiScreen(new GUIAdminManagementHUD());
 			}
 		});
 	}

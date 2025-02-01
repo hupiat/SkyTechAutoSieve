@@ -46,7 +46,7 @@ public class PacketSyncEnergy implements IMessage {
 		@Override
 		public IMessage onMessage(PacketSyncEnergy message, MessageContext ctx) {
 			if (ctx.side == Side.CLIENT) {
-				PacketSyncHandlers.handleSyncEnergy(message);
+				PacketClientHandlers.handleSyncEnergy(message);
 			}
 			return null;
 		}

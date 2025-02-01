@@ -89,7 +89,7 @@ public class PacketSyncSieveData implements IMessage {
 		@Override
 		public IMessage onMessage(PacketSyncSieveData message, MessageContext ctx) {
 			if (ctx.side == Side.CLIENT) {
-				PacketSyncHandlers.handleSyncSieveData(message);
+				PacketClientHandlers.handleSyncSieveData(message);
 			}
 			return null;
 		}
