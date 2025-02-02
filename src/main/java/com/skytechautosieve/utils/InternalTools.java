@@ -6,10 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -41,6 +44,21 @@ public abstract class InternalTools {
 			return server.getPlayerList().canSendCommands(player.getGameProfile());
 		}
 		return false;
+	}
+
+	public static IBlockState getStateFromMeta(String blockName, int meta) {
+		Block block = Block.getBlockFromName(blockName);
+
+		Collection<IBlockState> validStates = block.getBlockState().getValidStates();
+
+		for (IBlockState state : validStates) {
+			int stateMeta = block.getMetaFromState(state);
+			if (stateMeta == meta) {
+				return state;
+			}
+		}
+
+		return block.getDefaultState();
 	}
 
 	private static final String CONFIG_FILE = "config/skytechautosieve_config.properties";

@@ -35,6 +35,9 @@ public class GUIAdminManagement extends GuiScreen {
 	private List<Block> availableBlocks;
 	private List<ItemStack> availableDrops;
 
+	private List<Block> filteredBlocks;
+	private List<ItemStack> filteredDrops;
+
 	private int selectedBlockIndex = -1;
 	private int selectedDropIndex = -1;
 
@@ -100,12 +103,12 @@ public class GUIAdminManagement extends GuiScreen {
 	}
 
 	private void drawBlocks() {
-		List<Block> availableBlocks = this.availableBlocks.stream()
+		filteredBlocks = availableBlocks.stream()
 				.filter(block -> isMatchingSearchQuery(block.getLocalizedName(), searchBlocksField))
 				.collect(Collectors.toList());
 
-		for (int i = scrollOffset; i < Math.min(scrollOffset + visibleItems, availableBlocks.size()); i++) {
-			Block block = availableBlocks.get(i);
+		for (int i = scrollOffset; i < Math.min(scrollOffset + visibleItems, filteredBlocks.size()); i++) {
+			Block block = filteredBlocks.get(i);
 			ItemStack stack = new ItemStack(block);
 			String name = block.getLocalizedName();
 			int drawY = 50 + (i - scrollOffset) * itemHeight;
@@ -121,12 +124,12 @@ public class GUIAdminManagement extends GuiScreen {
 	}
 
 	private void drawDrops() {
-		List<ItemStack> availableDrops = this.availableDrops.stream()
+		filteredDrops = this.availableDrops.stream()
 				.filter(drop -> isMatchingSearchQuery(drop.getDisplayName(), searchDropsField))
 				.collect(Collectors.toList());
 
-		for (int i = scrollOffset; i < Math.min(scrollOffset + visibleItems, availableDrops.size()); i++) {
-			ItemStack item = availableDrops.get(i);
+		for (int i = scrollOffset; i < Math.min(scrollOffset + visibleItems, filteredDrops.size()); i++) {
+			ItemStack item = filteredDrops.get(i);
 			String name = item.getDisplayName();
 			int drawY = 50 + (i - scrollOffset) * itemHeight;
 
@@ -134,7 +137,8 @@ public class GUIAdminManagement extends GuiScreen {
 				drawRect(this.width - 30 - 110, drawY - 5, this.width, drawY + 15, 0x80FFFFFF);
 			}
 
-			if (repository.getDropData(availableBlocks.get(selectedBlockIndex)).stream()
+			System.out.println(repository.getDropData(filteredBlocks.get(selectedBlockIndex)));
+			if (repository.getDropData(filteredBlocks.get(selectedBlockIndex)).stream()
 					.anyMatch(data -> ItemStack.areItemsEqual(item, data.getItem()))) {
 				drawRect(this.width - 30 - 110, drawY - 5, this.width, drawY + 15, 0x8000FF00);
 			}
@@ -157,13 +161,9 @@ public class GUIAdminManagement extends GuiScreen {
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		if (button.equals(addOrRemoveButton)) {
-			Block block = availableBlocks.stream()
-					.filter(blockData -> isMatchingSearchQuery(blockData.getLocalizedName(), searchBlocksField))
-					.collect(Collectors.toList()).get(selectedBlockIndex);
+			Block block = filteredBlocks.get(selectedBlockIndex);
 			Set<SieveDropData> dropData = repository.getDropData(block);
-			ItemStack item = availableDrops.stream()
-					.filter(drop -> isMatchingSearchQuery(drop.getDisplayName(), searchDropsField))
-					.collect(Collectors.toList()).get(selectedDropIndex);
+			ItemStack item = filteredDrops.get(selectedDropIndex);
 			boolean existing = dropData.stream().anyMatch(data -> ItemStack.areItemsEqual(data.getItem(), item));
 			NetworkHandler.NETWORK.sendToServer(new PacketUpdateSieveData(block.getRegistryName().toString(),
 					item.getItem().getRegistryName().toString(), !existing, dropRate));
@@ -231,8 +231,8 @@ public class GUIAdminManagement extends GuiScreen {
 						this.buttonList.add(addOrRemoveButton);
 						this.buttonList.add(rateSlider);
 					}
-					Optional<SieveDropData> existing = repository.getDropData(availableBlocks.get(selectedBlockIndex))
-							.stream().filter(data -> ItemStack.areItemsEqual(availableDrops.get(selectedDropIndex),
+					Optional<SieveDropData> existing = repository.getDropData(filteredBlocks.get(selectedBlockIndex))
+							.stream().filter(data -> ItemStack.areItemsEqual(filteredDrops.get(selectedDropIndex),
 									data.getItem()))
 							.findAny();
 					if (existing.isPresent()) {

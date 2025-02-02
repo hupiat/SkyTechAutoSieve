@@ -37,18 +37,21 @@ public class SieveDropDataRepository extends WorldSavedData {
 	public void setDropData(Block block, Set<SieveDropData> drops, World world, boolean writeInConfig) {
 		sieveData.put(block, drops);
 		if (writeInConfig) {
-			InternalTools.eraseConfig(block.getRegistryName().toString());
+			String key = block.getRegistryName().toString() + "," + block.getMetaFromState(block.getDefaultState());
+			InternalTools.eraseConfig(key);
 			StringBuilder dropsBuilder = new StringBuilder();
 			for (SieveDropData dropData : drops) {
 				if (dropsBuilder.length() != 0) {
 					dropsBuilder.append(";");
 				}
-				dropsBuilder.append(dropData.getItem().getItem().getRegistryName() + "," + dropData.getDropRate());
+				dropsBuilder.append(dropData.getItem().getItem().getRegistryName() + "," + dropData.getDropRate() + ","
+						+ dropData.getItem().getItem().getMetadata(dropData.getItem()));
 			}
-			InternalTools.writeConfig(block.getRegistryName().toString(), dropsBuilder.toString());
+			InternalTools.writeConfig(key, dropsBuilder.toString());
 		}
 		world.getMapStorage().setData(DATA_NAME, this);
 		world.getMapStorage().saveAllData();
+		markDirty();
 	}
 
 	public Set<SieveDropData> getDropData(Block block) {
@@ -62,12 +65,20 @@ public class SieveDropDataRepository extends WorldSavedData {
 			if (StringUtils.equals(entry.getKey().toString(), "process_time_seconds")) {
 				continue;
 			}
-			Block block = Block.getBlockFromName(entry.getKey().toString());
+			String[] blockParts = entry.getKey().toString().split(",");
+			Block block = Block.getBlockFromName(blockParts[0]);
+			if (block != null) {
+				block = InternalTools.getStateFromMeta(blockParts[0], Integer.parseInt(blockParts[1])).getBlock();
+			}
 			String[] values = entry.getValue().toString().split(";");
 			syncMap.putIfAbsent(block, new HashSet<>());
 			for (String value : values) {
-				syncMap.get(block).add(new SieveDropData(new ItemStack(Item.getByNameOrId(value.split(",")[0])),
-						Float.parseFloat(value.split(",")[1])));
+				String[] parts = value.split(",");
+				if (parts.length > 1) {
+					int meta = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
+					syncMap.get(block).add(new SieveDropData(new ItemStack(Item.getByNameOrId(parts[0]), 1, meta),
+							Float.parseFloat(parts[1])));
+				}
 			}
 		}
 		sieveData.clear();
