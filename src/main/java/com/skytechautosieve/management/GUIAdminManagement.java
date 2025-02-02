@@ -137,7 +137,6 @@ public class GUIAdminManagement extends GuiScreen {
 				drawRect(this.width - 30 - 110, drawY - 5, this.width, drawY + 15, 0x80FFFFFF);
 			}
 
-			System.out.println(repository.getDropData(filteredBlocks.get(selectedBlockIndex)));
 			if (repository.getDropData(filteredBlocks.get(selectedBlockIndex)).stream()
 					.anyMatch(data -> ItemStack.areItemsEqual(item, data.getItem()))) {
 				drawRect(this.width - 30 - 110, drawY - 5, this.width, drawY + 15, 0x8000FF00);
