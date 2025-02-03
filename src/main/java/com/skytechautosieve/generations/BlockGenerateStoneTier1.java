@@ -16,7 +16,7 @@ public class BlockGenerateStoneTier1 extends Block {
 	static {
 		Object processTime = InternalTools.readConfig().get(InternalTools.CONFIG_PROCESS_TIME_STONE_TIER1);
 		if (processTime != null) {
-			PROCESS_TIME_REQUIRED = Integer.parseInt(processTime.toString()) * 20;
+			PROCESS_TIME_REQUIRED = (int) Double.parseDouble(processTime.toString()) * 20;
 		}
 	}
 
