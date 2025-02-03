@@ -1,11 +1,6 @@
 {
-  "parent": "block/cube",
+  "parent": "block/cube_all",
   "textures": {
-    "up": "skytechautosieve:blocks/generate_stone_tier1",
-    "down": "skytechautosieve:blocks/generate_stone_tier1",
-    "north": "skytechautosieve:blocks/generate_stone_tier1",
-    "south": "skytechautosieve:blocks/generate_stone_tier1",
-    "east": "skytechautosieve:blocks/generate_stone_tier1",
-    "west": "skytechautosieve:blocks/generate_stone_tier1"
+    "all": "skytechautosieve:blocks/generate_stone_tier1"
   }
 }
