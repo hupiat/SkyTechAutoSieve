@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 public class BlockGenerateStoneTier2 extends Block {
 	public static int PROCESS_TIME_REQUIRED = 10;
 	static {
-		Object processTime = InternalTools.readConfig().get(InternalTools.CONFIG_PROCESS_TIME_STONE_TIER1);
+		Object processTime = InternalTools.readConfig().get(InternalTools.CONFIG_PROCESS_TIME_STONE_TIER2);
 		if (processTime != null) {
 			PROCESS_TIME_REQUIRED = Integer.parseInt(processTime.toString()) * 20;
 		}
