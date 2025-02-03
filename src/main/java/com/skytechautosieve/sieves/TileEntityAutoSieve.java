@@ -44,7 +44,7 @@ public class TileEntityAutoSieve extends TileEntity implements ITickable, IInven
 	private static int PROCESS_TIME_REQUIRED = 5 * 20;
 
 	static {
-		Object processTime = InternalTools.readConfig().get("process_time_seconds");
+		Object processTime = InternalTools.readConfig().get(InternalTools.CONFIG_PROCESS_TIME);
 		if (processTime != null) {
 			PROCESS_TIME_REQUIRED = Integer.parseInt(processTime.toString()) * 20;
 		}

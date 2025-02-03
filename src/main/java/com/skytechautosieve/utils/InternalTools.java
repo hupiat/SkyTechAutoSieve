@@ -61,6 +61,9 @@ public abstract class InternalTools {
 		return block.getDefaultState();
 	}
 
+	public static final String CONFIG_PROCESS_TIME = "process_time_seconds";
+	public static final String CONFIG_PROCESS_TIME_STONE_TIER1 = "process_time_stone_tier1_seconds";
+	public static final String CONFIG_PROCESS_TIME_STONE_TIER2 = "process_time_stone_tier2_seconds";
 	private static final String CONFIG_FILE = "config/skytechautosieve_config.properties";
 
 	public static Properties readConfig() {

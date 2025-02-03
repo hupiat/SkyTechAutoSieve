@@ -11,6 +11,9 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class BlockGenerateStoneHandlers {
 
 	public static void scheduleUpdate(World world, int delayTicks, BlockPos pos, Block instance) {
@@ -18,19 +21,27 @@ public abstract class BlockGenerateStoneHandlers {
 	}
 
 	public static void fillChest(World world, BlockPos pos) {
-		BlockPos blockBelow = pos.down();
-		IBlockState blockStateBelow = world.getBlockState(blockBelow);
+		List<BlockPos> positions = new ArrayList<>();
+		positions.add(pos.up());
+		positions.add(pos.down());
+		positions.add(pos.east());
+		positions.add(pos.north());
+		positions.add(pos.south());
+		positions.add(pos.west());
 
-		if (blockStateBelow.getBlock() instanceof BlockChest) {
-			TileEntity tileEntity = world.getTileEntity(blockBelow);
-			if (tileEntity instanceof TileEntityChest) {
-				TileEntityChest chest = (TileEntityChest) tileEntity;
+		for (BlockPos position : positions) {
+			IBlockState state = world.getBlockState(position);
+			if (state.getBlock() instanceof BlockChest) {
+				TileEntity tileEntity = world.getTileEntity(position);
+				if (tileEntity instanceof TileEntityChest) {
+					TileEntityChest chest = (TileEntityChest) tileEntity;
 
-				for (int i = 0; i < chest.getSizeInventory(); i++) {
-					ItemStack stackInSlot = chest.getStackInSlot(i);
-					if (stackInSlot.isEmpty()) {
-						chest.setInventorySlotContents(i, new ItemStack(Item.getItemFromBlock(Blocks.COBBLESTONE), 64));
-						break;
+					for (int i = 0; i < chest.getSizeInventory(); i++) {
+						ItemStack stackInSlot = chest.getStackInSlot(i);
+						if (stackInSlot.isEmpty()) {
+							chest.setInventorySlotContents(i, new ItemStack(Item.getItemFromBlock(Blocks.COBBLESTONE), 64));
+							break;
+						}
 					}
 				}
 			}
