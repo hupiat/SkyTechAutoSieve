@@ -1,7 +1,7 @@
 package com.skytechautosieve.sieves;
 
 import com.skytechautosieve.NetworkHandler;
-import com.skytechautosieve.sieves.networking.PacketOpenHUD;
+import com.skytechautosieve.sieves.packets.PacketOpenHUD;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

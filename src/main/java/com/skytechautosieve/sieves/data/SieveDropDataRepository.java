@@ -26,6 +26,12 @@ public class SieveDropDataRepository extends WorldSavedData {
 	private static final String DATA_NAME = "skytech_sieve_data";
 	private Map<Block, Set<SieveDropData>> sieveData = new HashMap<>();
 
+	private static final Set<String> CONFIG_KEYS_TO_EXCLUDE = new HashSet<String>() {{
+		add(InternalTools.CONFIG_PROCESS_TIME);
+		add(InternalTools.CONFIG_PROCESS_TIME_STONE_TIER1);
+		add(InternalTools.CONFIG_PROCESS_TIME_STONE_TIER2);
+	}};
+
 	public SieveDropDataRepository() {
 		super(DATA_NAME);
 	}
@@ -62,7 +68,7 @@ public class SieveDropDataRepository extends WorldSavedData {
 		Properties properties = InternalTools.readConfig();
 		Map<Block, Set<SieveDropData>> syncMap = new HashMap<>();
 		for (Entry<Object, Object> entry : properties.entrySet()) {
-			if (StringUtils.equals(entry.getKey().toString(), "process_time_seconds")) {
+			if (CONFIG_KEYS_TO_EXCLUDE.contains(entry.getKey().toString())) {
 				continue;
 			}
 			String[] blockParts = entry.getKey().toString().split(",");

@@ -1,4 +1,4 @@
-package com.skytechautosieve.sieves.networking;
+package com.skytechautosieve.sieves.packets;
 
 import com.skytechautosieve.hud.GUIAdminManagementHUD;
 import com.skytechautosieve.sieves.TileEntityAutoSieve;

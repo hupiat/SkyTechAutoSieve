@@ -75,8 +75,19 @@ public class ContainerAutoSieve extends Container {
 		ItemStack stack = slot.getStack();
 		ItemStack copy = stack.copy();
 
-		if (!this.mergeItemStack(stack, 0, 41, true)) {
-			return ItemStack.EMPTY;
+		int tileInventorySize = 42;
+		int playerInventoryStart = tileInventorySize;
+		int playerHotbarStart = playerInventoryStart + 27;
+		int playerHotbarEnd = playerHotbarStart + 9;
+
+		if (index < tileInventorySize) {
+			if (!this.mergeItemStack(stack, playerInventoryStart, playerHotbarEnd, true)) {
+				return ItemStack.EMPTY;
+			}
+		} else {
+			if (!this.mergeItemStack(stack, 0, tileInventorySize, false)) {
+				return ItemStack.EMPTY;
+			}
 		}
 
 		if (stack.isEmpty()) {
@@ -85,6 +96,7 @@ public class ContainerAutoSieve extends Container {
 			slot.onSlotChanged();
 		}
 
+		slot.onTake(playerIn, stack);
 		return copy;
 	}
 }

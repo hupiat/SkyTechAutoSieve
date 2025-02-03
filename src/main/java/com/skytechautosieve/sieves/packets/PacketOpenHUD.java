@@ -1,4 +1,4 @@
-package com.skytechautosieve.sieves.networking;
+package com.skytechautosieve.sieves.packets;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

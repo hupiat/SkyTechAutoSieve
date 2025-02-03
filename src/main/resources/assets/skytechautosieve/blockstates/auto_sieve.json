@@ -1,5 +1,5 @@
 {
   "variants": {
-    "inventory": { "model": "skytechautosieve:auto_sieve" }
+    "normal": { "model": "skytechautosieve:auto_sieve" }
   }
 }
