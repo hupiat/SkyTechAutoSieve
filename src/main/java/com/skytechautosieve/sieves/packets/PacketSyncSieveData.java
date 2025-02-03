@@ -1,4 +1,4 @@
-package com.skytechautosieve.sieves.networking;
+package com.skytechautosieve.sieves.packets;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

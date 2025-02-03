@@ -1,7 +1,7 @@
 package com.skytechautosieve;
 
 import com.skytechautosieve.sieves.data.SieveDropDataRepository;
-import com.skytechautosieve.sieves.networking.PacketSyncSieveData;
+import com.skytechautosieve.sieves.packets.PacketSyncSieveData;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;

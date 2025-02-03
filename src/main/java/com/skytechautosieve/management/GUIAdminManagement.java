@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import com.skytechautosieve.NetworkHandler;
 import com.skytechautosieve.sieves.data.SieveDropData;
 import com.skytechautosieve.sieves.data.SieveDropDataRepository;
-import com.skytechautosieve.sieves.networking.PacketUpdateSieveData;
+import com.skytechautosieve.sieves.packets.PacketUpdateSieveData;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;

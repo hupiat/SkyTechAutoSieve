@@ -2,7 +2,7 @@ package com.skytechautosieve.sieves;
 
 import com.skytechautosieve.NetworkHandler;
 import com.skytechautosieve.Program;
-import com.skytechautosieve.sieves.networking.PacketSyncEnergy;
+import com.skytechautosieve.sieves.packets.PacketSyncEnergy;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

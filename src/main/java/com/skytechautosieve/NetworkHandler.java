@@ -1,9 +1,9 @@
 package com.skytechautosieve;
 
-import com.skytechautosieve.sieves.networking.PacketOpenHUD;
-import com.skytechautosieve.sieves.networking.PacketSyncEnergy;
-import com.skytechautosieve.sieves.networking.PacketSyncSieveData;
-import com.skytechautosieve.sieves.networking.PacketUpdateSieveData;
+import com.skytechautosieve.sieves.packets.PacketOpenHUD;
+import com.skytechautosieve.sieves.packets.PacketSyncEnergy;
+import com.skytechautosieve.sieves.packets.PacketSyncSieveData;
+import com.skytechautosieve.sieves.packets.PacketUpdateSieveData;
 
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
