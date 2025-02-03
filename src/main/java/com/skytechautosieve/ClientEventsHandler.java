@@ -34,6 +34,10 @@ public class ClientEventsHandler {
 
 		ModelLoader.setCustomModelResourceLocation(BlocksSubscriberHandler.AUTO_SIEVE_ITEM, 0,
 				new ModelResourceLocation("skytechautosieve:auto_sieve", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(BlocksSubscriberHandler.GENERATE_STONE_TIER1_ITEM, 0,
+				new ModelResourceLocation("skytechautosieve:generate_stone_tier1", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(BlocksSubscriberHandler.GENERATE_STONE_TIER2_ITEM, 0,
+				new ModelResourceLocation("skytechautosieve:generate_stone_tier2", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(BlocksSubscriberHandler.SPEED_UPGRADE, 0,
 				new ModelResourceLocation("skytechautosieve:speed_upgrade", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(BlocksSubscriberHandler.FORTUNE_UPGRADE, 0,

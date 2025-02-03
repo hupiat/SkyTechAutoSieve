@@ -1,4 +1,5 @@
 tile.auto_sieve.name=Sift Machine
-sounds.skytechautosieve.sift_action=Sifting in progress...
+tile.generate_stone_tier1.name=Stone Generator (tier 1)
+tile.generate_stone_tier2.name=Stone Generator (tier 2)
 item.skytechautosieve.fortune_upgrade.name=Fortune Upgrade
 item.skytechautosieve.speed_upgrade.name=Speed Upgrade
